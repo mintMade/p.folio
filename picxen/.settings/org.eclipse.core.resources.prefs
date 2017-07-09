@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+encoding//WebContent/dbsql=euc-kr
+encoding//src/com/picxen/comments/model/CommentsDAO.java=UTF-8
+encoding//src/com/picxen/photo/controller/PhotoDetailController.java=UTF-8
+encoding/<project>=UTF-8

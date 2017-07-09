@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+    
+<sqlMapConfig>
+	
+		<!-- Configure a built-in transaction manager.  If you're using an 
+       app server, you probably want to use its transaction manager 
+       and a managed datasource -->
+
+	<transactionManager type="JDBC" commitRequired="false">
+		<dataSource type="JNDI">
+			<property name="DataSource"
+			value="java:comp/env/jdbc/oracledb"/>
+		</dataSource>
+	</transactionManager>
+	
+	<sqlMap resource="com/ibatis/sqlmaps/member.xml"></sqlMap>
+	<sqlMap resource="com/ibatis/sqlmaps/photo.xml"></sqlMap>
+	<sqlMap resource="com/ibatis/sqlmaps/userMain.xml"></sqlMap>
+	<sqlMap resource="com/ibatis/sqlmaps/iplog.xml"></sqlMap>
+	<sqlMap resource="com/ibatis/sqlmaps/faves.xml"></sqlMap>
+	<sqlMap resource="com/ibatis/sqlmaps/comments.xml"></sqlMap>
+	
+	
+</sqlMapConfig>

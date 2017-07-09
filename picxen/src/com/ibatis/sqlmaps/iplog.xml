@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="iplog">
+	<typeAlias alias="ilBean" type="com.picxen.log.model.IpLogBean"/>
+
+<insert id="ipInsert" parameterClass="ilBean">
+	<selectKey keyProperty="logNo" resultClass="int">
+		select iplog_seq.nextval from dual
+	</selectKey>
+		insert into iplog(logNo, userid, ip, ptNo)
+			values(#logNo#, #userid#, #ip#, #ptNo#)
+</insert>
+
+
+<!-- private int logNo;
+	private String userid;
+	private String ip;
+	private int ptNo;
+	private Timestamp idate; -->
+
+</sqlMap>

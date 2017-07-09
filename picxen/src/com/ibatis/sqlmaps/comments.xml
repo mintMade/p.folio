@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="comments">
+	<typeAlias alias="cmBean" type="com.picxen.comments.model.CommentsBean"></typeAlias>
+	<typeAlias alias="mvBean" type="com.picxen.comments.model.MemberViewBean"></typeAlias>
+	<typeAlias alias="mcvBean" type="com.picxen.comments.model.MemCommentViewBean"></typeAlias>
+	<typeAlias alias="clBean"  type="com.picxen.comments.model.CmLikeBean"></typeAlias>
+	
+	<resultMap id="contentClob" class="mcvBean">
+		<result property="commentNo" column="commentNo"/>
+		<result property="commentUser" column="commentUser"/>
+		<result property="regdate" column="regdate"/>
+		<result property="commentLike" column="commentLike"/>
+		<result property="content" column="content" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="groupNo" column="groupNo"/>
+		<result property="sortGroup" column="sortGroup"/>
+		<result property="step" column="step"/>
+		<result property="sortNo" column="sortNo"/>
+		<result property="delflag" column="delflag"/>
+		<result property="ptNo" column="ptNo"/>
+		<result property="userid" column="userid"/>
+		<result property="fName" column="fName"/>
+		<result property="lName" column="lName"/>
+		<result property="myIcon" column="myIcon"/>
+	</resultMap>
+
+	<select id="userComments" parameterClass="int">
+		select * from comments where ptNo = #ptNo# order by regdate desc
+	</select>
+	
+	<insert id="insertCmts" parameterClass="cmBean">
+		<selectKey keyProperty="commentNo" resultClass="int">
+			select comments_seq.nextval as commentNo from dual
+		</selectKey>
+			insert into comments(commentNo, commentUser, content, groupNo, ptNo)
+    			values(#commentNo#, #commentUser#, #content#, #commentNo#, #ptNo#)
+	</insert>
+	
+	<select id="getMyAvtar" parameterClass="String" resultClass="mvBean">
+		select * from member_view where userid=#userid#
+	</select>
+	
+	<select id="getMemNum" parameterClass="String" resultClass="int">
+		select memberNo from member_view where userid=#userid#
+	</select>
+
+<!-- 일반 코멘트 출력 -->
+	<select id="getComments" parameterClass="int" resultMap="contentClob"> 
+	<!-- select * from (select  commentNo, commentUser, regdate, commentLike, content, groupNo, step, sortNo, delflag, ptNo, userid, fName, 
+		lName, myIcon, ROW_NUMBER() over(order by commentLike desc) as commentRk from memComment_view where ptNo=#ptNo#) 
+     where ptNo =#ptNo# and commentLike <![CDATA[=]]> 0 or commentRK <![CDATA[>]]><![CDATA[=]]> 3 
+      order by regdate desc --> <!-- 쿼리변경: 베스트제외  -->
+      
+		<![CDATA[
+			  select * from memComment_view where groupNo NOT IN 
+		            (select groupNo from 
+		                (SELECT commentNo ,groupNo, max(commentLike) as commentLike
+		                    FROM memComment_view where ptNo =#ptNo#
+		                        GROUP BY commentNo, groupNo
+		                            ORDER BY commentLike DESC) where rownum <= 1 and commentLike >= 5) 
+		                           and ptNo = #ptNo# order by groupNo, sortNo]]>        
+	</select>
+
+<!-- 탑코멘트 출력-->	
+	<select id="getTopComments" parameterClass="int" resultMap="contentClob">			
+	<!-- select * from (select  commentNo, commentUser, regdate, commentLike, content, groupNo, step, sortNo, 
+		delflag, ptNo, userid, fName, lName, myIcon, ROW_NUMBER() over(order by commentLike desc) as 
+			commentRk from memComment_view where ptNo=#ptNo#) where ptNo=#ptNo# and commentRk 
+			<![CDATA[<]]><![CDATA[=]]> 2 and commentLike <![CDATA[>]]><![CDATA[=]]> 1 
+      		order by DECODE (commentLike, Max(commentLike) over(), 1),regdate desc -->	<!-- 쿼리변경 -->
+	<![CDATA[
+		 select * from memComment_view where groupNo IN 
+			(select groupNo from 
+    			(SELECT commentNo ,groupNo, max(commentLike) as commentLike
+        			FROM memComment_view where ptNo =#ptNo#
+            			GROUP BY commentNo, groupNo
+                			ORDER BY commentLike DESC) where rownum <= 1 and commentLike >= 5)
+ 		order by sortNo
+	]]>
+	</select>
+	
+	<!-- <update id="cmLikeMerge" parameterClass="clBean">
+		<![CDATA[merge into cmlike m
+			using dual
+			on (m.commentNo=#commentNo#)
+			when NOT matched then
+    		insert (clNo, commentUser, ptNo, commentNo)
+    		values(cmlike_seq.nextval, #commentUser#, #ptNo#, #commentNo#)]]>
+	</update>cdata -->
+	
+	<!--머지: 데이터가 없으면 insert (있으면 업데이트는 제외) -->
+	<update id="cmLikeMerge" parameterClass="clBean">
+		<![CDATA[merge into cmlike m
+			using dual
+			on (m.commentUser=#commentUser# and m.ptNo=#ptNo# and m.commentNo=#commentNo# and m.sortNo=#sortNo# and m.userid=#userid#)
+			when NOT matched then]]>
+    		insert (clNo, commentUser, ptNo, commentNo, sortNo, userid)
+    		values(cmlike_seq.nextval, #commentUser#, #ptNo#, #commentNo#, #sortNo#, #userid#)
+	</update><!-- cdata -->
+	
+	<update id="upCommentLikeTran" parameterClass="clBean">
+		update comments set commentLike = commentLike +1
+    		where commentNo=#commentNo# and 
+        		(select count(*) from cmlike where ptNo = #ptNo# and commentUser=#commentUser# and commentNo=#commentNo#
+        			and sortNo=#sortNo# and userid=#userid#) <![CDATA[<]]>= 1
+	</update>
+	
+	<!-- 리플 삭제에서 사용: 삭제취소 -->	
+	<select id="getComment" parameterClass="int" resultClass="cmBean">
+		select * from Comments where commentNo = #commentNo#
+	</select> 
+
+<!-- 코멘트 like log1 -->	
+	<select id="getCmLikeList" parameterClass="int" resultClass="clBean">
+		select * from cmlike where ptNo=#ptNo#
+	</select> 
+	
+<!-- 코멘트 like log1 parameterMap 물음표아니면 에러-->
+	<parameterMap class="Map" id="getCmlogMap">
+		<parameter property="ptNo1" jdbcType="NUMBER" mode="INOUT"/>
+		<parameter property="userid1" jdbcType="VARCHAR" mode="INOUT"></parameter>
+	</parameterMap>
+	
+	<select id="getCmlog" parameterMap="getCmlogMap" resultClass="clBean" remapResults="true"> <!--  remapResults="true" -->
+		select * from cmlike where ptNo=? and userid=?
+	</select>
+
+<!-- 리플 트랜젝션 -->
+<!-- 자기보다 높은 sortNo가 있을 경우+1을 해줌 :오름차순/내림차순-->
+	<update id="rplSNUpdate" parameterClass="cmBean">
+		update comments set sortNo = sortNo+1
+			where groupNo = #groupNo# and sortNo > 
+			(select Max(sortNo) as sortNo from comments where sortGroup = #sortGroup# and groupNo=#groupNo#)
+			
+		<!-- update comments set sortNo = sortNo+1
+			where groupNo = #groupNo# and sortNo > #sortNo#	 -->
+	</update>
+	
+	<update id="rplSNDwndate" parameterClass="cmBean"> 			
+		update comments set sortNo = sortNo+1
+			where groupNo = #groupNo# and sortNo > #sortNo#
+	</update>
+
+<!-- dwnDate시 자기보다 큰 소트그룹+1 -->
+	<update id="upSortGroup" parameterClass="cmBean"> 			
+		update comments set sortGroup = sortGroup+1
+			where groupNo = #groupNo# and sortGroup > #sortGroup#
+	</update>	
+
+<!--위 업데이트로 들어갈 sortNo를 +1하여 벌려놓은 후 그자리를 찾기위한쿼리 -->
+	<select id="sortMax" parameterClass="cmBean" resultClass="int">
+		select Max(sortNo) as sortNo from comments where sortGroup = #sortGroup# and groupNo=#groupNo#
+	</select>
+
+<!-- 오름차순 내림차순 기준 카운트구하기 and 같은 그룹 데이터가 존재하는가-->
+	<select id="cmMIN" parameterClass="cmBean" resultClass="int">
+		select MIN(sortNo) from memComment_view 
+			where groupNo = #groupNo# and sortGroup=#sortGroup#
+
+	</select>	<!-- !!!!!!!!!!!!!!!!!!!!!여기조건에서 문제발생 -->
+	
+	<select id="cmCNT" parameterClass="cmBean" resultClass="int">
+		select count(*) from memcomment_view 
+			where groupNo=#groupNo# and sortGroup = #sortGroup#+1 and step=#step#+1 and sortNo = #sortNo#+1
+	</select>
+	
+<!-- TOp 리플입력 그룹넘버참조, 머지를 이용 인서트 두번응용-->	
+	<insert id="insertTreply" parameterClass="cmBean">
+		<selectKey keyProperty="commentNo" resultClass="int">
+			select comments_seq.nextval as commentNo from dual
+		</selectKey>
+			insert into comments(commentNo, commentUser, content, groupNo, sortNo, ptNo, step, sortGroup)
+    			values(#commentNo#, #commentUser#, #content#, #groupNo#, #sortNo#, #ptNo#, #step#, #sortGroup#)
+	</insert>
+
+<!-- 리플 같은 그룹번호 sortNo -업데이트하고 지우기 -->
+	<update id="rplSortN-" parameterClass="cmBean">
+		update comments set sortNo = sortNo-1
+			where groupNo = #groupNo# and sortNo >#sortNo#
+	</update>
+	
+	<update id="sortGroup-" parameterClass="cmBean">
+		update comments set sortGroup = sortGroup-1
+			where groupNo = #groupNo# and sortGroup > #sortGroup# 
+			and (select count(*) from comments where sortGroup = #sortGroup# and groupNo = #groupNo#) = 1
+	</update>
+	
+	
+	<delete id="delCmLike" parameterClass="int">
+		delete cmlike where commentNo = #commentNo#
+	</delete>
+	
+	<delete id="deleteCm" parameterClass="int">
+		delete comments where commentNo = #commentNo#
+	</delete>
+
+<!-- 마지막 sortNo :원본글은 코멘트넘버와 그룹넘버가 동일 -->
+	<select id="trplCNT" parameterClass="int" resultClass="int">
+		select Max(sortNo) as sortNo from comments where groupNo=#commentNo#
+	</select>
+<!-- sortGroup중복이 존재하는지 갯수출력-->
+	<select id="sortG_cnt" parameterClass="cmBean" resultClass="int">
+		select count(*) from comments where groupNo = #groupNo# and sortGroup = #sortGroup#
+	</select>
+	
+<!-- 리플 순서 기준 컬럼 sortGroup -->
+	<select	id="sortGroupCnt" parameterClass="int" resultClass="int">
+		select Max(sortGroup) as sortGroup from comments where groupNo = #commentNo#
+	</select>
+</sqlMap>

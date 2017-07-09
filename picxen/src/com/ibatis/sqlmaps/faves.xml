@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="faves">
+	<typeAlias alias="fvBean" type="com.picxen.faves.model.FavesBean"	/>
+	<typeAlias alias="mvBean" type="com.picxen.comments.model.MemberViewBean"	/>
+	
+	
+	<!-- fave로그 키값을 입력받지 않아 데이터가 줄줄이올라감?로그 테스트로 확인바람  -->
+	<insert id="favesInsert" parameterClass="fvBean">
+		<selectKey keyProperty="faveNo" resultClass="int">
+			select faves_seq.nextval from dual
+		</selectKey>
+		<!-- insert into faves(faveNo, fUserId, photoNo)
+			values(#faveNo#, #fUserId#, #photoNo#) --><!-- 조건부 insert로 수정 2107 -->
+			insert into faves (faveNo, fUserId, photoNo)
+			    select #faveNo#, #fUserId#, #photoNo#
+    			from dual
+    			where (select count(*) from faves where fuserid=#fUserId# and photoNo=#photoNo#) = 0
+	</insert>
+
+	<update id="updateFaves" parameterClass="fvBean">
+		<!-- update photos set faves = faves+1
+    		where photoNo=#photoNo# and 
+    			(select count(*) from faves where fUserid=#fUserId# and photoNo=#photoNo#) <![CDATA[<]]>= 1 --> <!-- 트랜잭션에서 1개인서트 후업데이트라서 최초 적어도1은됨 -->
+    	update photos set faves = faves+1
+    		where photoNo=#photoNo# and 
+    			(select count(*) from faves where fUserid=#fUserId# and photoNo=#photoNo#) = 0 <!-- DAO에서 업데이트 성공후 insert -->
+	</update>
+
+	<procedure id="prcdFaves_pop" parameterClass="fvBean">
+		{call procedure_pop(#photoNo#)}
+	</procedure>
+
+<!--     faveNo number primary key not null,
+    fUserId Varchar2(30) 
+        references member(userid) on delete cascade not null,
+    photoNo number
+        references photos(photoNo) not null -->
+        
+    <select id="favesList" parameterClass="int" resultClass="mvBean" ><!-- faves -->
+    	select userid, fname, lname, myicon from member_view v, faves f
+            where v.userid IN (select fuserid from faves where photoNo =#ptNo#)
+            and F.faveNo IN (select faveNo from faves where photoNo =#ptNo#)
+            and v.userid = f.fuserid 
+            order by faveNo desc
+    </select>
+    
+    <select id="getUloader" parameterClass="int" resultClass="String">
+    	select uploader from photos where photoNo = #ptNo#
+    </select>
+       
+    <select id="getLikeIconList" parameterClass="int" resultClass="mvBean"><!-- LIKE -->
+    	select v.userid, fname, lname, myicon from member_view v, likeCnt l
+            where v.userid IN (select userid from likeCnt where ptNo =#ptNo#)
+            and l.likeNo IN (select likeNo from likeCNt where ptNo =#ptNo#)
+            and v.userid = l.userid 
+            order by likeNo desc
+    </select>   
+</sqlMap>    

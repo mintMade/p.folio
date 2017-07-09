@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+<!-- Controller -->
+	<bean id="indexController"
+		class="com.picxen.controller.IndexController"
+		p:ptService-ref="ptService"> 
+	</bean>
+
+<!-- member -->
+	<bean id="agreementController"
+		class="com.picxen.member.controller.AgreementController"
+		p:memberService-ref="memberService">
+	</bean>
+	
+	<bean id="loginController"
+		class="com.picxen.member.controller.LoginController"
+		p:memberService-ref="memberService">
+	</bean>
+	<bean id="memberEditController"
+		class="com.picxen.member.controller.MemberEditController"
+		p:memberService-ref="memberService">
+	</bean>
+
+<!-- photo -->
+	<bean id="photoUploadController"
+		class="com.picxen.photo.controller.PhotoUploadController"
+		p:ptServcie-ref="ptService"
+		p:cgService-ref="cgService">
+	</bean>
+	
+	<bean id="photoListController"
+		class="com.picxen.photo.controller.PhotoListController"
+		p:ptService-ref="ptService">
+		<!-- p:ptService=controller의 setter에서 setPtService의 set빼고적용됨 -->
+	</bean>
+
+	<bean id="photoDetailController"
+		class="com.picxen.photo.controller.PhotoDetailController"
+		p:ptService-ref="ptService"
+		p:cmService-ref="cmService" 	
+		p:umService-ref="umService"
+		p:fvService-ref="fvService"> 
+	</bean>
+	
+	<bean id="photoViewCountController"
+		class="com.picxen.photo.controller.PhotoViewCountController"
+		p:photoService-ref="ptService"
+		p:ipLogService-ref="ilService"> <!-- 코멘트 로그맵  -->
+	</bean>
+	
+<!-- userMain  -->
+	<bean id="userMainController"
+		class="com.picxen.user.controller.UserMainController"
+		p:uMainService-ref="umService"><!-- 누락되면 널포인트 -->
+	</bean>
+	
+	<bean id="userSettingController"
+		class="com.picxen.user.controller.UserSettingController"
+		p:userMainService-ref="umService"><!-- 회원정보 수정 -->
+	</bean>
+	
+	<bean id="userBGController"
+		class="com.picxen.user.controller.UserBGController"
+		p:umService-ref="umService"><!-- 회원 BG변경 -->
+	</bean>
+	
+	<bean id="userPhotoSettingController" class="com.picxen.user.controller.UserPhotoSettingController" 
+		p:umService-ref="umService"><!--유저 이미지 수정  -->
+	</bean>
+	
+<!-- likeCnt -->
+	<bean id="photoLikeController"
+		class="com.picxen.photo.controller.PhotoLikeController"
+		p:photoService-ref="ptService">
+	</bean>
+
+<!-- faves -->
+	<bean id="favesController"
+		class="com.picxen.faves.controller.FavesController"
+		p:fvService-ref="fvService">
+	</bean>
+	
+<!-- comments -->
+	<!-- <bean id="commentsController" 
+		class="com.picxen.comments.controller.CommentsController"
+		p:cmService-ref="cmService">
+	</bean> --><!-- 코멘트 =페이지 디테일컨트롤러에서 같이처리-->
+
+	<bean id="commentsLikeContrller"
+		class="com.picxen.comments.controller.CommentsLikeController"
+		p:cmService-ref="cmService">
+	</bean>
+	
+	<bean id="commentReplyController"
+		class="com.picxen.comments.controller.CommentReplyController"
+		p:cmService-ref="cmService">
+	</bean>
+
+
+<!-- Service -->
+	<bean id="ptService"  class="com.picxen.photo.model.PhotoService"
+		p:ptDao-ref="ptDAO"><!-- ptDao, photoDao 틀린 경우 getter?출력 -->
+	</bean>
+
+	<bean id="memberService" class="com.picxen.member.model.MemberService"
+		p:memberDao-ref="memberDAO">
+	</bean>
+	
+	
+	<bean id="cgService" class="com.picxen.photo.model.CategoryService"
+		p:cgDao-ref="cgDAO">
+	</bean>
+	<!-- <bean id="cgService" class="com.picxen.photo.model.CategoryService"
+		p:cgDao-ref="cgDAO">
+		잘못참조혹은 오타날경우 [no matching editors or conversion strategy found "dao"]
+	</bean> -->
+	
+	<bean id="umService" class="com.picxen.user.model.UserMainService"
+		p:UMainDao-ref="umDAO">
+		<!-- setUMainDao service의 set을꼭붙여야함 set이없으면 dispatcher의 p:에서 출력이안됨-->
+	</bean>
+	
+	<bean id="ilService" class="com.picxen.log.model.IpLogService"
+		p:ilDao-ref="ilDAO">
+	</bean>
+	
+	<bean id="fvService" class="com.picxen.faves.model.FavesService"
+		p:favesDao-ref="ibatisFvDAO">
+	</bean>
+	
+	<bean id="cmService" class="com.picxen.comments.model.CommentsService"
+		p:cmDao-ref="cmDAO">
+	</bean>
+
+<!-- DAO -->
+	<bean id="ptDAO" class="com.picxen.photo.model.PhotoDAO">
+	</bean>
+
+	<bean id="memberDAO" class="com.picxen.member.model.MemberDAO">
+	</bean>
+	
+	<bean id="cgDAO" class="com.picxen.photo.model.CategoryDAO">
+	</bean>
+
+	<bean id="umDAO" class="com.picxen.user.model.UserMainDAO">
+	</bean>
+	
+	<bean id="ilDAO" class="com.picxen.log.model.IpLogDAO">
+	</bean>
+	
+	<bean id="ibatisFvDAO" class="com.picxen.faves.model.IbatisFavesDAO">	
+	</bean>
+	
+	<bean id="cmDAO" class="com.picxen.comments.model.CommentsDAO">
+	</bean>
+
+<!-- interceptor -->	
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="alwaysUseFullPath" value="true"/>
+		<property name="interceptors">
+			<list>
+				<ref bean="commonHandlerInterceptor"/>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="commonHandlerInterceptor" class="com.picxen.controller.CommonHandlerInterceptor"
+		p:cgService-ref="cgService" 
+		p:memService-ref="memberService">
+	</bean>
+	
+<!-- ViewResolver -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/view/" />
+		<!-- <property name="prefix" value="/WEB-INF/" /> -->
+		<!-- <property name="prefix" value="/" /> -->
+		<property name="suffix" value=".jsp" />
+		<property name="order" value="1" />
+	</bean>
+	
+
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+	     <property name="order" value="0" />
+	</bean>
+	
+	<!-- MultipartResolver -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>52428800</value>
+		</property>
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	
+</beans>

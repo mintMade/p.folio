@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="member">
+	<typeAlias alias="memberBean" 
+	type="com.picxen.member.model.MemberBean"/>
+	
+<!--private int no;
+	private String userid;
+	private String fName;
+	private String lName;
+	private String pwd;
+	private String email;
+	private Timestamp regdate;
+	private int mileage; -->
+	
+	<insert id="memberInsert" parameterClass="memberBean">
+		<selectKey keyProperty="memberNo" resultClass="int">
+			select member_seq.nextval from dual
+		</selectKey>
+		insert into member(memberNo, userid, fName, lName, pwd, email)
+			values(#memberNo#, #userid#, #fName#, #lName#, #pwd#, #email#)
+	</insert>
+
+	<select id="memberCheckEmail" parameterClass="string" resultClass="int">
+		select count(*) from member where email = #email#
+	</select>
+
+	<select id="memberCheckId" parameterClass="string" resultClass="int">
+	select count(*) from member where userid= #userid#
+	</select>
+	
+	<select id="memberCheckIdPwd" parameterClass="string" resultClass="string">
+	select pwd from member where userid = #userid#
+	</select>
+	
+	<select id="vMyInfo" parameterClass="string" resultClass="memberBean">
+	select * from member where userid = #userid#
+	</select>
+	
+	<update id="upMyInfo" parameterClass="memberBean">
+	update member set fName=#fName#, lName=#lName#, pwd=#pwd#, email=#email#, myIcon=#myIcon#
+    	where userid=#userid#
+	</update>
+	
+	<select id="getIcon" parameterClass="String" resultClass="String">
+		select myIcon from member where userid=#iconUserid#
+	</select>
+</sqlMap>

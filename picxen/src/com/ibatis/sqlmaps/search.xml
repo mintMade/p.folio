@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="search">
+	<typeAlias alias="ptBean" type="com.picxen.photo.model.PhotoBean"/>
+	
+	<!-- searchPt -->
+	<sql id="photo.where">
+		<isNotEmpty property="searchKeyword">
+			where photoTitle like '%' || #searchKeyword# || '%'
+				or tag like '%'|| #searchKeyword# ||'%'
+		</isNotEmpty>
+	</sql>
+
+	<select id="resultPtBySearch" parameterClass="ptBean" resultClass="ptBean">
+		select * from photos
+			<include refid="photo.where" />
+		
+	</select>
+
+
+</sqlMap>    

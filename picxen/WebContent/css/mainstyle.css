@@ -1,0 +1,1025 @@
+
+body, span, p
+{
+	font-family:Verdana,Tahoma, 돋움 !important;
+	font-size:11px;
+	color:#555555;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+
+html, body {
+	margin:0;
+	padding:0;
+	height:100%;
+	}
+	
+* { font : Verdana,Tahoma,돋움 !important; }	
+
+td, th
+{
+	font-family: 돋움 !important;
+	font-size:11px;
+	padding:4px;
+	
+}
+
+a:link{color:#555555;text-decoration:none}
+a:visited{color:#555555;text-decoration:none}
+a:hover{color:#047CC1;text-decoration:underline;}
+a:active{color:#047CC1;text-decoration:underline;}
+a:outline{outline:none;}
+a {
+    outline: none;
+}
+
+
+input,Textarea, select {
+    font-family: 돋움 !important;
+	font-size: 9pt;
+	color:#555555;
+}
+
+
+table{
+	margin: 0;
+	padding: 0;
+	border-collapse: collapse;
+}
+
+table.box, table.box2{
+	margin: 0;
+	padding: 0;
+	border: solid silver 1px;
+	border-collapse: collapse;
+}
+
+table.box2 th{
+	background-color: #eeeeee;
+	border: solid silver 1px;
+}
+
+table.box2 td{
+	border: solid silver 1px;	
+}
+
+td.line
+{
+	border-bottom:solid 1px silver;
+}
+
+/* ie input x clear */
+::-ms-clear {
+   display: none;
+}
+
+::-ms-reveal {
+   display: none;
+}
+
+td.line3/* 메인 라인  */
+{
+	border-left:1px solid #E3E3E3;
+}
+
+table.box3{
+	margin: 0;
+	padding: 0;
+	border-top: solid silver 1px;
+	border-bottom: solid silver 1px;	
+	border-collapse: collapse;
+}
+
+table.box3 td{
+	border-top: solid silver 1px;
+	border-bottom: solid silver 1px;	
+}
+
+.box4
+{
+	background-color: #eeeeee;
+}
+
+.box5
+{
+	background-color: #000000;
+}
+
+.box6/* 메인언더라인 */
+{
+	background-color: #E3E3E3;
+}
+
+
+
+ul, ol { list-style-type:none; }
+
+* { margin:0; padding:0; }
+
+
+.clfix:after {content: "."; display: block; height: 0px; clear: both; visibility: hidden;}
+.clfix {display: inline-block;}
+.clfix {display: block;}
+* html .clfix {height: 1%;} /* Hides from IE-mac */
+.clfix { zoom:1; } /*for IE 5.5-7*/
+
+#header{
+	width:100%; height:100px; background-color:#000000;
+}
+.title1{
+	width:200px; height:10px; background-color:#0000cd;
+	padding: 40px 10px 20px 50px;
+}
+
+.name1{
+	width:150px; height:10px; background-color:#ff1493;
+	padding: 10px 20px 10px 50px;
+}
+
+/* 메인사진 이미지 */
+table.mainBG{
+	background: url(../pt_images/cloud.jpg) no-repeat center center;/* 가운데 기준으로 이미지확대 */
+	background-size: cover;
+	-webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+div.mainBG{
+	background: url(../pt_images/cloud.jpg) no-repeat center center;/* 가운데 기준으로 이미지확대 */
+	background-size: cover;
+	-webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    /* margin: 0px;
+    padding: 0px; */
+    
+}
+
+body.lginBG{
+	background: url(../pt_images/sunrise.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.mainInfoBG1{
+	width:35px;
+	height:25px;
+	margin:2.5px;
+}
+.mainInfoBG2{
+	width:35px;
+	height:30px;
+}
+
+
+/*index start BuTTons */
+/* 창크기에 따라 버튼 크기 변경*/
+	.btn-default-start { 
+ 	  color:#ffffff !important;
+	  line-height: 35px !important;
+	  text-align:center !important; 	
+	  font-weight: bold !important;
+	  font-size: 20px !important;
+	  min-width: 240px;
+	  max-width: 240px;
+	  min-height: 50px;
+	  max-height: 50px;
+	  background-color: #00AEFF; 
+	  border-color: #0088FF;
+	} 
+	 
+	.btn-default-start:hover, 
+	.btn-default-start:focus, 
+	.btn-default-start:active, 
+	.btn-default-start.active, 
+	.open .dropdown-toggle.btn-default-start {
+ 	  color:#ffffff !important;
+	  line-height: 35px !important;
+	  text-align:center !important; 
+	  font-weight: bold !important;
+	  font-size: 20px !important;
+	  min-width: 240px;
+	  max-width: 240px;
+	  min-height: 50px;
+	  max-height: 50px;
+	  background-color: #2EBDFF;  
+	  border-color:  #0889FA; 	  
+	}
+ 
+ /* index 서브 메뉴버튼 */
+	.btn-sub-start {
+	  font-weight: bold;
+	  min-width: 150px;
+	  max-width: 150px;
+	  color: #ffffff !important;
+	  background-color: #00AEFF; 
+	  border-color: #0088FF;
+	} 
+	 
+	.btn-sub-start:hover, 
+	.btn-sub-start:focus, 
+	.btn-sub-start:active, 
+	.btn-sub-start.active, 
+	.open .dropdown-toggle.btn-sub-start {
+	  font-weight: bold;
+	  min-width: 150px;
+	  max-width: 150px;
+	  color: #ffffff !important;
+	  background-color: #2EBDFF;  
+	  border-color:  #0889FA;
+	} 
+	/* index 서브 메뉴버튼 */
+		.btn-sub-smstart {
+		  font-weight: bold;
+		  min-width: 100px;
+		  max-width: 100px;
+		  color: #ffffff !important;
+	  	  font-size:11px !important;		  
+		  background-color: #00AEFF; 
+		  border-color: #0088FF;
+		} 
+		 
+		.btn-sub-smstart:hover, 
+		.btn-sub-smstart:focus, 
+		.btn-sub-smstart:active, 
+		.btn-sub-smstart.active, 
+		.open .dropdown-toggle.btn-sub-smstart {
+		  font-weight: bold;
+		  min-width: 100px;
+		  max-width: 100px;
+		  color: #ffffff !important;
+		  font-size:11px !important;
+		  background-color: #2EBDFF;  
+		  border-color:  #0889FA;  
+		} 
+ 
+ /* RESIZE*/
+	.btn-sm-start { 
+ 	  color:#ffffff !important;
+	  line-height: 35px !important;
+	  text-align:center !important; 	
+	  font-weight: bold !important;
+	  font-size: 15px !important;
+	  min-width: 190px;
+	  max-width: 190px;
+	  min-height: 40px;
+	  max-height: 40px;
+	  background-color: #00AEFF; 
+	  border-color: #0088FF;
+	} 
+	 
+	.btn-sm-start:hover, 
+	.btn-sm-start:focus, 
+	.btn-sm-start:active, 
+	.btn-sm-start.active, 
+	.open .dropdown-toggle.btn-sm-start {
+ 	  color:#ffffff !important;
+	  line-height: 35px !important;
+	  text-align:center !important; 
+	  font-weight: bold !important;
+	  font-size: 15px !important;
+	  min-width: 190px;
+	  max-width: 190px;
+	  min-height: 40px;
+	  max-height: 40px;
+	  background-color: #2EBDFF;  
+	  border-color:  #0889FA; 	  
+	}
+ 
+	.btn-sub-sm-start {
+	  font-weight: bold;
+	  min-width: 150px;
+	  max-width: 150px;
+	  color: #ffffff; 
+	  background-color: #00AEFF; 
+	  border-color: #0088FF;
+	} 
+	 
+	.btn-sub-sm-start:hover, 
+	.btn-sub-sm-start:focus, 
+	.btn-sub-sm-start:active, 
+	.btn-sub-sm-start.active, 
+	.open .dropdown-toggle.btn-sub-sm-start {
+	  font-weight: bold;
+	  min-width: 150px;
+	  max-width: 150px;
+	  color: #ffffff; 
+	  background-color: #2EBDFF;  
+	  border-color:  #0889FA;  
+	} 
+
+/*     사진리스트 링크 버튼 반투명 활성      */
+.btn-poplistT{
+position:absolute; 
+bottom:35px; 
+left:20px; 
+border: 0 none; 
+background-color:transparent;
+font-size:15pt;
+font-weight:bold;  
+color:#ffffff;
+text-shadow:
+    -0.3px -0.3px 0 #525252,
+    0.3px -0.3px 0 #525252,
+    -0.3px 0.3px 0 #525252,
+    0.3px 0.3px 0 #525252;
+}
+ 
+.btn-poplistT:hover, 
+.btn-poplistT:focus, 
+.btn-poplistT:active, 
+.btn-poplistT.active,
+.open .dropdown-toggle.btn-poplistT {
+position:absolute; 
+bottom:35px; 
+left:20px;
+border: 0 none; 
+background-color: rgba(245, 245, 245, 0.4);
+font-size:15pt;
+font-weight:bold;  
+color:#ffffff;
+text-shadow:
+    -0.3px -0.3px 0 #525252,
+    0.3px -0.3px 0 #525252,
+    -0.3px 0.3px 0 #525252,
+    0.3px 0.3px 0 #525252;
+}
+
+.btn-poplistB{
+position:absolute; 
+bottom:15px; 
+left:20px; 
+border: 0 none; 
+background-color:transparent;
+color:#ffffff;
+text-shadow:
+    -0.3px -0.3px 0 #525252,
+    0.3px -0.3px 0 #525252,
+    -0.3px 0.3px 0 #525252,
+    0.3px 0.3px 0 #525252;
+}
+
+.btn-poplistB:hover, 
+.btn-poplistB:focus, 
+.btn-poplistB:active, 
+.btn-poplistB.active{
+position:absolute; 
+bottom:15px; 
+left:20px; 
+border: 0 none; 
+background-color: rgba(245, 245, 245, 0.4);
+color:#ffffff;
+text-shadow:
+    -0.3px -0.3px 0 #525252,
+    0.3px -0.3px 0 #525252,
+    -0.3px 0.3px 0 #525252,
+    0.3px 0.3px 0 #525252;
+}
+/*     사진리스트 링크 버튼 반투명 활성 끝      */
+
+/* 코멘트 좋아요 버튼 아웃라인제거 */
+.btn-cmBtn{
+border: 0 none;
+background-color:transparent;
+/* font-size:10pt; */
+font-family: 돋움 !important;
+/* color:#708090; */
+}
+	
+/* 좋아요 버튼 아웃라인제거끝 */
+
+/* 로그인 버튼 */
+.btn-logi { 
+  font-weight: bold;
+  min-width: 100px;
+  max-width: 100px;
+  color: #FFFFFF; 
+  background-color: #00AEFF; 
+  border-color: #0088FF;
+} 
+ 
+.btn-logi:hover, 
+.btn-logi:focus, 
+.btn-logi:active, 
+.btn-logi.active, 
+.open .dropdown-toggle.btn-logi {
+  font-weight: bold;
+  min-width: 100px;
+  max-width: 100px;
+  color: #FFFFFF; 
+  background-color: #2EBDFF;  
+  border-color:  #0889FA;  
+} 
+ 
+.btn-logi:active, 
+.btn-logi.active, 
+.open .dropdown-toggle.btn-logi {
+  font-weight: bold;
+  min-width: 100px;
+  max-width: 100px;
+  color: #FFFFFF;
+  background-image: none; 
+}
+/* 로그인 버튼 끝 */
+
+
+/* 메인상단 메뉴  */
+.h2{
+	font-size:15px;
+	font-weight:bold;
+	color:#0889FA;
+}
+
+/* 메인포토영역 */
+table.box7{
+	width:100%;
+	margin: 0 auto;
+	border-top:solid 1px #c0c0c0;
+	border-bottom:solid 1px c0c0c0;
+	background-color:#f5f5f5;
+}
+
+table.box8{
+	width:1000;
+	margin: 0 auto;
+	background-color:#f5f5f5;
+}
+
+/* 메인 다이나믹 포토 */
+.mainPL{
+	max-width: 100%;
+	/* width:1000;
+ 	margin: 0 auto; */ 
+	background-color:#f5f5f5;
+	width:auto; 
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #000ff;
+	height: auto;
+	float: left;
+	text-align: center;
+}
+
+ /* .imagewrapper img {
+  max-width: 100%;
+  height: auto;
+  width: auto\9; For IE8
+} *//*  ie ff에선 작동안함*/
+
+.imagewrapper img {
+  width: 100%;
+  height: auto;
+}
+
+.imagewrappers img {
+    float: left; width: 100%;
+    -webkit-transition-property: width;
+    -webkit-transition-duration: .3s;
+}
+
+.imagewrapperss img{
+  float: left;
+  margin: 5px;
+  padding: 5px;
+  width: 300px;
+  height: 300px;
+} 
+
+ul{
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+.ratio-4-3 {
+  width:100%;
+  position:relative;
+  background:url() 50% 50% no-repeat;
+  background-size:cover;
+  background-clip:content-box;
+}
+.ratio-4-3:before{
+	display:block;
+    content:"";
+    padding-top:100%;
+}
+/* 로그인 */
+
+body.lginBG{
+	background: url(../pt_images/sunrise.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+/* 사진리스트 비율 */
+.ratio{
+    position:relative;
+    width: 100%;
+    /* height: 150px; */
+    height: 0;
+    /* padding-bottom: 50% ; % of width, defines aspect ratio */
+    padding-top:100%; 
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;  
+    overflow: hidden;
+}
+
+.ratio img{
+  min-height: 100%;
+  min-width: 100%;
+  /* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  /* IE 5-7 */
+  filter: alpha(opacity=0);
+  /* modern browsers */
+  opacity: 0;  
+}
+
+/* 사진리스트 비율 끝 */
+
+/* 사진리스트 인기도 */
+.ratio .caption{
+    position:absolute;
+    top:5px;
+    right:10px;
+    background:rgba(245, 245, 245, 0.0);
+    width:80px;
+    height:40px;
+    /* padding:2%; */
+    display: none;
+    text-align:center;
+    text-align:right;
+    color:#ffffff !important;
+    font-size:25pt;
+    /* font-weight:bold; */
+    text-shadow:
+    -0.5px -0.5px 0 #696969,
+    0.5px -0.5px 0 #696969,
+    -0.5px 0.5px 0 #696969,
+    0.5px 0.5px 0 #696969;
+    /* z-index:2; */
+}
+/* 사진리스트 인기도끝 */
+
+/* 상단네비바 */
+/* 투명 버튼 */
+.btn-navBtn{
+/* width:25px;
+height:25px; */
+margin-right:5px;
+color:#f5f5f5;	
+border: 0 none !important;
+background-color:transparent;
+/* font-size:10pt; */
+font-family: 돋움 !important;
+font-weight:bold;
+}
+.btn-navBtn:hover, 
+.btn-navBtn:focus, 
+.btn-navBtn:active, 
+.btn-navBtn.active, 
+.open .dropdown-toggle.btn-navBtn{
+/* width:25px;
+height:25px; */
+margin-right:5px;
+color:#f5f5f5;	
+border: 0 none !important;
+background-color:transparent;
+font-family: 돋움 !important;
+}
+
+/* userSetting */
+.editBox{
+width: 500px;
+height: 630px;
+margin-top: 30px;
+margin: 0 auto;
+
+background-color:white;
+border-radius: 7px; 
+-moz-border-radius: 7px; 
+-webkit-border-radius: 7px; 
+border: 0px solid #800000;
+
+box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+-moz-box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+-webkit-box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+-o-box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
+.editContainer{
+min-width:950px;
+display:table; margin: 0 auto;
+}
+
+/* userMain  */
+
+.userMainBG{
+	/* background: url(../my_bg/moon.jpg) no-repeat center center; *//*상대url은 해당 페이지 상단에 작성 */
+	background-size: cover;
+	-webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    margin: 0;
+    padding: 0;
+    width:100%; 
+    height:500px;
+}
+
+/* 유저메인의 중앙카테고리 버튼 */
+.btn-btmLine{
+outline:none;
+padding-top:13px;
+padding-bottom:14px;
+/* border: 0 none; */
+border-bottom:2px solid transparent;
+background-color:transparent;
+font-size:14px;
+font-weight:bold;
+color:#808080;
+/* color: #0889FA; */
+border-radius:0;
+}
+
+.btn-btmLine:hover {
+  border-bottom:2px solid silver;
+  color: #0889FA;
+  box-shadow: none; /* 클릭시 들어가는 효가 x */
+}
+.btn-btmLine:focus,
+.btn-btmLine:active, 
+.btn-btmLine.active, 
+.open .dropdown-toggle.btn-btmLine {
+  border-bottom:2px solid #0889FA;
+  color: #0889FA;
+  box-shadow: none; /* 클릭시 들어가는 효가 x */
+}
+
+
+/* 버튼 아웃라인 제거 */
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
+
+/* 로그인 박스 */
+.loginBox{
+width: 320px;
+/* height: 630px; */
+margin:120px auto 0 auto;
+
+background-color:#F7F7F7;
+
+border-radius: 3px; 
+-moz-border-radius: 3px; 
+-webkit-border-radius: 3px; 
+border: 0px solid #800000;
+
+box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+-moz-box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+-webkit-box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+-o-box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
+/* 이미지 업로드 페이지 */
+.upPhotoBody{
+/* min-height: 100%; */
+background-color:#000000;
+margin:0;
+padding:0;
+height:100%
+}
+
+.upPhotoViewBody{
+/* min-height: 100%; */
+background-color:#F5F5F5;
+margin:0;
+padding:0;
+height:100%
+}
+
+
+/* html, body {height:100%} */
+.upView{
+    width: 100%; 
+    height: auto; 
+    border:solid 2px #00bfFf;
+    float:left;
+}
+
+.addPhoto{
+    width: 100%;
+    min-width:200px;
+    height: auto; 
+    border:solid 2px #BEBEBE;
+    float:left;
+}
+
+.upBtn{ /* edit 버튼 */
+	  display: table; 
+	  margin-left: auto; 
+	  margin-right: auto;
+	  margin-top:10px;
+}
+
+.ptDetailBox{ /* 이미지 정보입력박스 */
+min-width: 450px;
+/* height: 630px; */
+margin-top: 30px;
+margin: 0 auto;
+background-color:white;
+ 
+ box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+-moz-box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+-webkit-box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+-o-box-shadow: 0 0 10px rgba(0,0,0,0.6); 
+}
+
+.editList{
+	color:#00BFFF; 
+	font-weight:bold;
+	font-size:13px;
+	margin-top:30px;
+	line-height:100%;
+}
+
+/* 업로드버튼 */
+
+.btn-photoUp {
+  background-color: hsl(312, 80%, 43%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e727c0", endColorstr="#c515a2");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#e727c0), to(#c515a2));
+  background-image: -moz-linear-gradient(top, #e727c0, #c515a2);
+  background-image: -ms-linear-gradient(top, #e727c0, #c515a2);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e727c0), color-stop(100%, #c515a2));
+  background-image: -webkit-linear-gradient(top, #e727c0, #c515a2);
+  background-image: -o-linear-gradient(top, #e727c0, #c515a2);
+  background-image: linear-gradient(#e727c0, #c515a2);
+  border-color: #c515a2 #c515a2 hsl(312, 80%, 40.5%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.16);
+  -webkit-font-smoothing: antialiased;
+  font-size:20px; 
+  font-weight:bold; 
+  width:350px; 
+  height:50px;
+}
+
+/* 이미지 매니저 페이지 업로드 버튼 */
+
+.btn-setPtUp {
+  background-color: hsl(312, 80%, 43%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e727c0", endColorstr="#c515a2");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#e727c0), to(#c515a2));
+  background-image: -moz-linear-gradient(top, #e727c0, #c515a2);
+  background-image: -ms-linear-gradient(top, #e727c0, #c515a2);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e727c0), color-stop(100%, #c515a2));
+  background-image: -webkit-linear-gradient(top, #e727c0, #c515a2);
+  background-image: -o-linear-gradient(top, #e727c0, #c515a2);
+  background-image: linear-gradient(#e727c0, #c515a2);
+  border-color: #c515a2 #c515a2 hsl(312, 80%, 40.5%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.16);
+  text-align:center;
+  -webkit-font-smoothing: antialiased;
+  font-size:15px; 
+  font-weight:bold; 
+  min-width:230px; 
+  height:40px;
+  margin:7px 7px 7px 15px;  
+}
+
+/* 이미지세팅 사진regdate */
+
+.regList{
+	clear:both; 
+	color:#00A5FF;
+	font-weight:bold; 
+	font-size:15px; 
+	padding:50px 5px 5px 5px;
+}
+
+/* 이미지세팅: 이미지 스타일 */
+.ratioPt{
+    position:relative;
+    width: 100%;
+    /* height: 150px; */
+    height: 0;
+    /* padding-bottom: 50% ; % of width, defines aspect ratio */
+    padding-top:100%; 
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;  
+    overflow: hidden;
+    border:2px solid #F5F5F5;
+}
+
+.ratioPt:hover,
+.ratioPt:focus, 
+.ratioPt:active, 
+.ratioPt.ac {
+	border: 2px solid #00A5FF;
+/* 	max-width:300px; userMain hover시 이미지 사이즈 변경됨*/
+}
+
+
+/* 상단 메뉴 */
+	/* menuLogo */
+	.logicon{
+		/* min-width:100px; */
+		/* float:left; */
+	}
+	
+	.logoIdle{
+		/* float:left; */
+		color:#ffffff;
+		font-family: Verdana,Tahoma, 돋움 !important;
+		font-size:20pt !important;
+		/* font-weight:bold; */
+	}
+
+	/* searchMenu */
+	.menuDsp{
+		/* float:left; */
+	}
+	
+	/*메뉴없애기  */
+	@media (max-width: 1000px) {
+	  #menuDsp {
+	    display: none;
+	  }
+	}
+	
+		@media (max-width: 700px) {
+	  #plogo, #menufncId, #menuId, .MenuBtnTxt  {
+	    display: none;
+	  }
+	}
+	
+	/* 메뉴 버튼 */
+	.btn-menuBtn {
+		padding: 0 15px 0 15px !important;
+		background-color:transparent;
+		font-size:11pt !important;
+		/* font-weight:bold !important; */
+		color: #CCCCCC !important; 
+		text-shadow:
+		    -0.3px -0.3px 0 #525252,
+		    0.3px -0.3px 0 #525252,
+		    -0.3px 0.3px 0 #525252,
+		    0.3px 0.3px 0 #525252;
+			}
+	
+	.btn-menuBtn:hover,
+	.btn-menuBtn:focus, 
+	.btn-menuBtn:active, 
+	.btn-menuBtn.active {
+		padding: 0 15px 0 15px !important;
+		background-color: rgba(245, 245, 245, 0.4);
+		font-size:11pt !important;
+		/* font-weight:bold;  */
+		color:#ffffff !important; 
+		text-shadow:
+		    -0.3px -0.3px 0 #525252,
+		    0.3px -0.3px 0 #525252,
+		    -0.3px 0.3px 0 #525252,
+		    0.3px 0.3px 0 #525252;
+	}	
+	/* 메뉴 버튼 텍스트  */
+	.MenuBtnTxt{
+		font-size:11pt !important;
+		color:#CCCCCC !important; 
+		font-weight:bold !important;
+	}
+	/* 상단 메뉴 텍스트 */
+	.MenuTxt{
+		font-size:11pt !important;
+		color:#CCCCCC !important; 
+		font-weight:bold !important;
+	}	
+	
+	/* 메뉴 아이디 */
+	#menufncId{ /*말줄임 아이디  */
+		color:#CCCCCC;
+		font-weight:bold;
+		font-size:11pt;
+	}
+	
+	#menuId{ /*아이디  */
+		color:#CCCCCC;
+		font-weight:bold;
+		font-size:11pt;
+	}
+	
+	/* 회원가입 */
+	#agrChkIc_off { 
+		background-image:url(../images/join_chk_off.png) ; 
+		background-repeat: no-repeat ; 
+		background-position: right 10px center;
+	}
+	
+		#agrChkIc_on{ 
+		background-image:url(../images/join_chk_on.png) ; 
+		background-repeat: no-repeat ; 
+		background-position: right 10px center;
+	}
+	
+	/* 이미지 자세히 보기 detail */
+.btn-dtailDis {
+  background-color: hsl(0, 0%, 43%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#828282", endColorstr="#6d6d6d");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#828282), to(#6d6d6d));
+  background-image: -moz-linear-gradient(top, #828282, #6d6d6d);
+  background-image: -ms-linear-gradient(top, #828282, #6d6d6d);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #828282), color-stop(100%, #6d6d6d));
+  background-image: -webkit-linear-gradient(top, #828282, #6d6d6d);
+  background-image: -o-linear-gradient(top, #828282, #6d6d6d);
+  background-image: linear-gradient(#828282, #6d6d6d);
+  border-color: #6d6d6d #6d6d6d hsl(0, 0%, 41%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.13);
+  -webkit-font-smoothing: antialiased;
+}
+
+	/* login drop down */
+.dropdown-menu {
+    min-width: auto !important;
+}
+
+	/* 사진 리스트 메뉴 */
+#pt_list_Btn, #cgName{
+	font-size:14px !important; 
+	color: #A0A0A0 ;
+	text-decoration: none !important;
+	padding: 0px !important;
+	margin: 20px 0 20px 0 !important;
+}
+	
+	#pt_list_Btn:hover, #cgName:hover,
+	#pt_list_Btn:focus, #cgName:focus, 
+	#pt_list_Btn:active, #cgName:active, 
+	.open .dropdown-toggle #pt_list_Btn, .open .dropdown-toggle #cgName {
+	color: #ff1493 !important;
+	font-size: 14px !important;
+	padding: 0px !important;
+	margin: 20px 0 20px 0 !important;
+	}
+	
+ /*detail pt*/
+	#cntr_algn{
+	 	display: table; 
+	 	margin: 0 auto;
+	}
+	
+	/* detail pt image */
+	
+	#contnr{
+		width: 100%; 
+		height: 100%;
+	}/* ptbox boundary */
+	
+	.fa-angle-right:hover{
+		color:white !important;
+	}
+	.fa-angle-left:hover{
+	 	color:white !important;
+	}/* side button */
+	
+	#d_width{
+		display: flex;
+		align-items: center; 
+		justify-content: center; 
+		display: -ms-flexbox; 
+		display: -webkit-flex; 
+		-ms-flex-pack: center; 
+	}/* horizontal, vertical-align */
+	
+	
+	#d_pt_cnter{
+		width:100%; text-align:center;
+	}/* horizontal-align for ie */
+ 	
+	#ptHgt{
+		max-width:100%; padding:10px;
+	}/* detail_imge */
+		
+	#rankScore > span{
+		font-family:impact !important;	
+	} /* score font */
+	
+ 	#gryFont{
+ 	 font-size:13px;
+ 	 font-weight:bold !important;
+ 	 color:color:#708090 !important;
+ 	}
+
+			

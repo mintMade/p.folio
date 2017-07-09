@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="userMain">
+	<typeAlias alias="mbBean" type="com.picxen.member.model.MemberBean"/>
+	<typeAlias alias="ptBean" type="com.picxen.photo.model.PhotoBean"/>
+	
+	
+	
+<!-- 	<select id="userHome" parameterClass="String" resultClass="memberBean">
+		select * from member where userid=#userid#
+	</select> -->
+	
+	<!-- <parameterMap class="map" id="userNick">
+		<parameter property="lName" javaType="string"
+		jdbcType="VARCHAR" mode="INOUT"/>
+		<parameter property="fName" javaType="string"
+		jdbcType="VARCHAR" mode="INOUT" />
+	</parameterMap> 유저 닉1,2넘겨줄때-->
+	
+<resultMap  id="viewUser" class="memberBean">
+   <result property="iconSize" column="iconSize" javaType="java.lang.Long"/>
+   <result property="bgSize" column="bgSize" javaType="java.lang.Long"/>
+   <result property="memberNo" column="memberNo"/>
+   <result property="userid" column="userid"/>
+   <result property="fName" column="fName"/>
+   <result property="lName" column="lName"/>
+   <result property="pwd" column="pwd"/>
+   <result property="email" column="email"/>
+   <result property="regdate" column="regdate"/>
+   <result property="mileage" column="mileage"/>
+   <result property="myIcon" column="myIcon" />
+   <result property="descript" column="descript"/>
+   <result property="bg" column="bg"/>
+</resultMap>
+	
+	
+	<select id="viewUserInfo" parameterClass="String" resultMap="viewUser" >
+		select * from member 
+			where userid=#userid#
+	</select>
+	
+	
+	<!-- 해당 아이디로 사진 조회해서 노출제외한 사진만 출력 --><!--sql문자열 끝에 ;찍으면 ORA-00911: 문자가 부적합합니다 -->
+	<select id="UserMainPtList" parameterClass="String" resultClass="ptBean">
+			select p.* from photos p, member m 
+			where p.uploader = m.userid
+				and m.userid=#userid#
+				and p.publicset <![CDATA[<>]]>1 order by p.regdate desc
+	</select> 
+
+	<update id="userSetUpdate" parameterClass="mbBean" >
+		<!-- update member set fName=#fName#, lName=#lName#, email=#email#, myIcon=#myIcon#, descript=#descript#, iconSize=#iconSize#
+			where userid=#userid# -->
+		update member set fName=#fName#, lName=#lName#, email=#email#, myIcon=#myIcon#, descript=#descript#, iconSize=#iconSize#
+			where userid=#userid#
+	</update>
+	
+	<select id="userLikeTotal" parameterClass="String" resultClass="int">
+		select count(likeCNT) from photos where uploader =#userid#
+	</select>
+	
+	<select id="userViewTotal" parameterClass="String" resultClass="int">
+		select count(viewCnt) from photos where uploader =#userid#
+	</select>
+	
+	<select id="userFaveTotal" parameterClass="String" resultClass="int">
+		select count(faves) from photos where uploader =#userid# 
+	</select>
+	
+	<select id="albumList" parameterClass="String" resultClass="ptBean">
+		select * from photos 
+    		where photoNo IN (select photoNo from faves where fuserid =#userid#) order by regdate desc
+	</select>
+	
+	<!-- userBG -->	
+	<parameterMap class="Map" id="bgMap">
+		<parameter property="bgNo" jdbcType="NUMBER" mode="INOUT" />
+		<parameter property="userid" jdbcType="VARCHAR" mode="INOUT" />
+	</parameterMap>
+	
+	<!-- <select id="getCmlog" parameterMap="getCmlogMap" resultClass="clBean" remapResults="true">
+		select * from cmlike where ptNo=? and userid=?
+	</select> -->
+	
+	<update id="upBgMap" parameterMap="bgMap">
+		update member set bg = (select imageurl from photos where photoNo=?)
+  				where userid=?
+	</update>
+	
+	<select id="ptListByTerm" parameterClass="String" resultClass="ptBean">
+		select * from photos where uploader = #userid# order by regdate desc
+	</select>
+	
+	<update id="updatePt" parameterClass="ptBean" >
+		update photos set categoryNo = #categoryNo#, photoTitle=#photoTitle#, tag=#tag#, description=#description#, publicSet=#publicSet# 
+ 				where photoNo=#photoNo#
+	</update>
+	
+	<delete id="delPt" parameterClass="int"><!-- 무결성 에러 sql테이블 시트 참조  -->
+		delete from photos where photoNo = #ptNo#
+	</delete>
+</sqlMap>
