@@ -27,15 +27,6 @@ public class MemberService {
 		return memberDao.checkUserEmail(email);
 	}
 	
-/*	public boolean checkUserid(String userid) throws SQLException{
-		boolean result = false;
-		int cnt = memberDao.checkUserid(userid);
-			if(cnt>0){
-				result = true;//해당 아이디가 존재하는 경우
-			}
-		return result;
-	}*///boolean 아이디 체크
-	
 	public int checkUserid(String userid) throws SQLException{
 		return memberDao.checkUserid(userid);
 	}//id체크
@@ -53,7 +44,7 @@ public class MemberService {
 		}else{
 			result=ID_NONE; //그렇지 않으면 아이디 없음
 		}
-		System.out.println("reesult"+result);
+		/*System.out.println("result"+result);*/
 		return result;
 		
 	}

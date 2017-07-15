@@ -64,18 +64,7 @@ public class PhotoDetailController {
 		System.out.println("DetailController: ptNo="+ptNo+"userid="+userid+"plBean="+plBean+",sort="+sort);
 		
 		
-		//db작업
-		/*try{ 
-			if("ptNo" != null && !"ptNo".isEmpty()){//null일경우 코멘트로  submit 할때 에러
-				Integer ptNo = Integer.parseInt(request.getParameter("ptNo"));//int값 parseInt로 적용
-				System.out.println("PtNo= "+ptNo);
-			}
-		}catch(Exception e){
-			System.out.println("ptNo request.getParameter 실패");
-			e.printStackTrace();
-		}*/
-		/*Integer ptNo = Integer.parseInt(request.getParameter("ptNo"));*/
-		
+		//db작업	
 		PhotoBean ptBean = null;
 		MemberBean mbBean = null;
 		boolean likeRslt = false;
@@ -129,7 +118,7 @@ public class PhotoDetailController {
 		System.out.println("u="+userid);
 		MemberViewBean mvBean = null;		
 		//코멘트 //내아바타정보
-		System.out.println("userrrrrrrrrroooiidd="+userid);
+		System.out.println("ptDetail.userid="+userid);
 		try{
 			mvBean = cmService.getMyAvatar(userid);//코멘트의 리플 유저 아바타가 현재 자기아바타로 보이게함:그렇지 않으면 코멘트 유저아바타가 보임
 			System.out.println("방문유저 아바타 조회성공 mvBean="+mvBean+", userid="+userid);
@@ -161,19 +150,6 @@ public class PhotoDetailController {
 			e.printStackTrace();
 		}
 		
-		//////////////////////////////////////
-				
-		//코멘트 로그11
-		/*ArrayList<CmLikeBean> cmlikeList = null;
-		
-		try{
-			cmlikeList =cmService.getCmLog(ptNo);///////////////////////////////로그찾기
-			System.out.println("좋아요 로그 로딩 성공"+cmlikeList.size());
-		}catch(SQLException e){
-			System.out.println("좋아요 로그 로딩 실패");
-			e.printStackTrace();
-		}*/
-		
 		//코멘트 로그2 map : 사진번호와 접속유저 아이디를 뽑은후 해당 코멘트 넘버만 뽑아서 비교
 		ArrayList<CmLikeBean> clikelist = null;
 		
@@ -191,23 +167,7 @@ public class PhotoDetailController {
 			e.printStackTrace();
 		}
 
-			/*FavesBean fvBean = null;
-			String fUserId = null;
-			fUserId = userid;
-			
-			fvBean.setfUserId(fUserId);
-			fvBean.setPhotoNo(ptNo);
-			System.out.println("fvvvvBean="+fvBean);
-			boolean fuResult = false;
-			try{
-				fuResult = fvService.chkFuid(fvBean);
-				System.out.println("fList=photoDetail 정보 로딩 성공!="+fuResult);
-			}catch(SQLException e){
-				System.out.println("fList=photoDetail 정보 로딩실패");
-				e.printStackTrace();
-			}*/
-		
-		
+
 		//결과 뷰페이지
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("chkLike", likeRslt);
@@ -219,10 +179,6 @@ public class PhotoDetailController {
 		mav.addObject("sort", sort);
 		mav.addObject("totalCRecord", clist.size());
 		mav.addObject("umId", umId);
-		/*mav.addObject("fvList", fList);//2207 faveInfo
-		mav.addObject("fvSize", fList.size());*/
-		
-		
 		
 		//코멘트
 		mav.addObject("mvBean", mvBean);
@@ -241,17 +197,6 @@ public class PhotoDetailController {
 	public ModelAndView postPhotoDetail(HttpServletRequest request, CommentsBean cmBean, String userid, int ptNo, String sort){
 		//파라미터
 		System.out.println("코맨트 Post 파라미터: cmBean="+cmBean+", userid="+userid+", ptNo="+ptNo+", sort="+sort);
-		
-		//별도 컨트롤러로 분리
-		/*try{ 
-			if("bgNo" != null && !"bgNo".isEmpty()){//null일경우 코멘트로  submit 할때 에러
-				Integer bgNo = Integer.parseInt(request.getParameter("bgNo"));//int값 parseInt로 적용
-				System.out.println("bgPtNo="+bgNo);
-			}
-		}catch(Exception e){
-			System.out.println("BG인덱스 로드 실패");
-			e.printStackTrace();
-		}*/
 		
 		//db
 		//멤버넘버조회 (부모키 입력위해 맴버넘버를 구해서 cmBean에 넣어줌)		
@@ -276,46 +221,7 @@ public class PhotoDetailController {
 			System.out.println("코멘트 입력 실패"+userid);
 			e.printStackTrace();
 		}
-		
 
-		
-	////////////////////////////이전주석
-		//코멘트 like update-cmlike 로그 조회해서 없으면 update
-		
-		//clBean.setCommentNo(commentNo);// 코멘트를 입력하지 않으면 키값이 0이되어 아무것도 이력못하게됨
-		//System.out.println("commentNo1="+commentNo +"clBean=1"+clBean);
-		/*clBean.setCommentUser(commentUser);*/
-		
-		//코멘트No가 참조키로 참조키를 입력받기 위해 매서드 작성
-		//겟CommentNo
-		/*int commentNo = 0;
-		try{
-			commentNo=cmService.getCommentNo();
-		}catch(SQLException e){
-			System.out.println("코멘트 번호 조회 실패 commentNo"+commentNo);
-			e.printStackTrace();
-		}*/
-		////////////////////////////이전주석끝		
-		
-		
-		/*int cKey=0;
-		try{
-			cKey=cmService.upCmLike(clBean);
-			System.out.println("코멘트 추천 성공cKey="+cKey);
-		}catch(SQLException e){
-			System.out.println("코멘트 추천 실패");
-			e.printStackTrace();
-		}*/
-
-	
-//리플입력
-		/*try{
-			
-		}catch(SQLException e){
-			System.out.println("리플입력 실패"+userid);
-			e.printStackTrace();
-		}*/
-		
 		ModelAndView mav = new ModelAndView();
 		/*mav.addObject("addLike", cKey);*/
 		/*mav.addObject("postComment", key);*/

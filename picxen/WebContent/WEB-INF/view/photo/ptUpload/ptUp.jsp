@@ -13,10 +13,8 @@
 
 <body class="upPhotoBody">
 
-<div style="width:100%; height:34px; background-color:#F5F5F5;">
-	<span class="fa fa-comments-o fa-2x" style=" vertical-align: middle; padding:3px;">
-	<span style="vertical-align: middle; font-weight:bold; font-size:12px;">첫 업로드입니다.</span></span>
-	
+<div style="width:100%; height:34px; /* background-color:#F5F5F5; */border-top:1px solid silver;">
+
 </div>
 
 <form name="ptUpfrm" id="ptUpfrm" method="post" action="${pageContext.request.contextPath}/photo/ptUpload/ptUp.do" enctype="multipart/form-data">
@@ -34,15 +32,7 @@
 	</div>
 </form>
 
-
 <script type="text/javascript">
-
-	/* $("#upBtn").click(function (){
-		$("#choosePt").trigger('click');
-			$('input[type=file]').change(function(event) { 
-			    $("#choosePt").closest("#ptUpfrm").submit();
-			});
-	});  */
 
 	$("#upBtn").click(function () {
 		$('input[type=file]').click();
@@ -51,28 +41,6 @@
 	$('input[type=file]').change(function() {
 	    $("#choosePt").closest("#ptUpfrm").submit();
 	});
-		
- 	/* $("#upBtn").click(function (){
-		$("#choosePt").trigger('click');
-		  $("#upBtn").blur(function (){
-				if(!ptUpfrm.uploadFile.value){
-					return;
-				}else if(ptUpfrm.uploadFile.value) {
-						$("#choosePt").closest("#ptUpfrm").submit();
-				}; 
-		   });
- });  */
-	
-	/*  $("#upBtn").click(function (){
-		$("#choosePt").trigger('click');
-		  $("#upBtn").blur(function (){
-				if(!ptUpfrm.uploadFile.value){
-					return;
-				}else if(ptUpfrm.uploadFile.value) {
-						$("#choosePt").closest("#ptUpfrm").submit();
-				}; 
-		   });
- });   */
 
 </script>
 

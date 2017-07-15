@@ -45,17 +45,6 @@ public class AgreementController {
 		return mav;
 	}
 	
-	//register페이지 1본 회원가입 형식 변경
-	/*@RequestMapping(value="/member/agreement.do", method=RequestMethod.POST)
-	public ModelAndView postAgree(){
-		System.out.println("회원 가입 페이지:postAgree()");
-		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/member/register");
-		
-		return mav;
-	}*/
-	
 	//회원가입, 가입 후 로그인
 	@RequestMapping(value="/member/agreement.do", method=RequestMethod.POST)
 	public ModelAndView postAgree(MemberBean mBean, HttpSession session){
@@ -86,7 +75,6 @@ public class AgreementController {
 		}
 		
 		try{
-			/*if(result==memberService.LOGIN_OK){*/
 				//[1]세션에 아이디저장
 				session.setAttribute("userid", userid);
 				/*Cookie cookie = new Cookie("ck_userid", URLEncoder.encode(userid, "euc-kr"));*/
@@ -103,61 +91,7 @@ public class AgreementController {
 		
 		return mav;
 	}
-	
-	//이메일 중복 주소체크, 아이디 체크 통합
-/*	@RequestMapping("/member/agreement.do")//아이디 페이지로 통합
-	public ModelAndView getCheckEmail(String email, HttpServletRequest request){
-		//파라미터
-		System.out.println("파라미터 이메일 중복 email="+email);
-		
-		//db작업-select
-		boolean result = false;
-		if(email != null && !email.isEmpty()){
-		try{
-			result = memberService.checkUserEmail(email);
-			System.out.println("이메일 중복 체크 성공:result"+result+"이메일="+email);
-		}catch(SQLException e){
-			System.out.println("이메일 중복 체크 실패:result"+result);
-			e.printStackTrace();
-		}
-		
-	}//if
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("emailFlag", result);
-		mav.setViewName("/member/agreement");
-		
-		return mav;
-	}*/
-	
-/*	@RequestMapping("/member/register.do")
-	public ModelAndView register(MemberBean mBean){
-		//회원가입 처리-insert
-		
-		//파라미터
-		System.out.println("register, mBean:"+mBean);
-		
-		//db작업
-		String email = mBean.getEmail();
 
-		int key = 0;
-		
-		try{
-			key = memberService.insertMember(mBean);
-			System.out.println("회원 가입 성공!, "+key
-					+", 입력값:mBean="+mBean);
-		}catch(SQLException e){
-			System.out.println("회원가입 실패");
-			e.printStackTrace();
-		}
-		
-		//결과 뷰페이지
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:/index.do");		
-		
-		return mav;
-	}//member
-*/	
-	
 	// id체크, email체크
 	@RequestMapping("/member/checkId.do")
 	public ModelAndView getCheckId(String userid, String email){
@@ -211,33 +145,5 @@ public class AgreementController {
 		
 		return mav;
 	}
-	
-/*	@RequestMapping("/member/checkId.do")
-	public ModelAndView getCheckId(String userid, HttpServletRequest request
-				, HttpServletResponse response){
-		//1파라미터
-		System.out.println("getCheckId, userId="+userid);
-		
-		//2. db작업-select
-		boolean result = false;
-		if(userid!=null && !userid.isEmpty()){
-			try{
-				result = memberService.checkUserid(userid);
-				System.out.println("아이디 체크 성공, result= "+result
-						+", userid= "+userid);
-			}catch(SQLException e){
-				System.out.println("아이디체크 실패");
-				e.printStackTrace();
-			}
-		}//if
-		
-		//3 결과 뷰페이지
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("userFlag", result);
-		mav.setViewName("/member/checkId");//팝업방식에서 바로 확인으로 변경
-		mav.setViewName("/member/checkId");
-		
-		return mav;
-	}*/
 	
 }///////class
