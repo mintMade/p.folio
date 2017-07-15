@@ -104,12 +104,10 @@ public class PhotoUploadController {
 		
 		//3.결과 뷰페이지
 		//!ptBean에 아직 업로드하지 않은상태
-		/*ptBean.setImageURL(imageUrl);*/
+		ptBean.setImageURL(imageUrl);
 		ptBean.setUploader(uploader);
 		
-		
-		mav.addObject("tempFile", tempFile);
-		/*mav.addObject("imageUrl", imageUrl);*/
+		mav.addObject("imageUrl", imageUrl);
 		mav.addObject("uploader", uploader);
 		mav.setViewName("/photo/ptUpload/ptPreview");
 		return mav;
