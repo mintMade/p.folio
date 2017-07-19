@@ -1,11 +1,7 @@
 package com.picxen.common;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 public class Utility {
 	public static final String UPLOAD_PATH
