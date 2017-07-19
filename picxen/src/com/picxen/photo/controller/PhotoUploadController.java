@@ -3,6 +3,8 @@ package com.picxen.photo.controller;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -66,10 +68,8 @@ public class PhotoUploadController {
 		/*String userid=(String)session.getAttribute("userid");*/
 		System.out.println("ptUploadPost(),파라미터 ptBean="+ptBean+", 업로더="+uploader);
 		
-		
 		//로그인된 경우에만 처리
 		ModelAndView mav = new ModelAndView();
-		
 		
 		//파일 업로드 처리
 		//사용자가 업로드하려고 선택한 파일-임시파일 형태
@@ -81,19 +81,21 @@ public class PhotoUploadController {
 		
 		//업로드 경로-실제 물리적인 경로 구하기
 		//upPath = session.getServletContext().getRealPath(upPath);
-		String upPath = Utility.PT_IMG_PATH;
+		//임시 파일 path
+		String junkPath = Utility.JUNK_FILES_PATH;
+		
+		//뷰 파일 path
+		String viewPath = Utility.PT_IMG_PATH;
 		
 		//파일이름이 중복되는 경우, 유일한 이름으로 변경하자=>  _일련번호
-		String imageUrl = Utility.getUniqueFileName(upPath, oName);
-		//ㄴ>저장전에 위imageUrl을 넘겨줘도되나.. 안될것같다 우선 저장하고 그파일을 불러와야하기 때문에 밑에까지 처리후 로딩
+		String imageUrl = Utility.getUniqueFileName(junkPath, oName, uploader);
 		
-	
 		//파일 업로드 처리
-		File myfile=new File(upPath, imageUrl);
-		
+		File myfile=new File(viewPath, imageUrl);
+
 		try{
 			tempFile.transferTo(myfile);
-			System.out.println("파일 업로드 처리 성공!"+myfile+", tempFile="+tempFile);
+			System.out.println("파일 업로드 처리 성공!"+myfile);
 		}catch(IllegalStateException e){
 			System.out.println("파일 업로드 처리 실패!");
 			e.printStackTrace();
@@ -126,8 +128,7 @@ public class PhotoUploadController {
 		}catch(SQLException e){
 			System.out.println("사진 등록 실패!!");
 			e.printStackTrace();
-		}
-				
+		}		
 		ModelAndView mav = new ModelAndView();
 		
 		mav.setViewName("redirect:/user/user/userMain.do?userid="+uploader);

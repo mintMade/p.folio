@@ -3,6 +3,7 @@ package com.picxen.user.controller;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +22,6 @@ import com.picxen.member.model.MemberBean;
 import com.picxen.user.model.UserMainService;
 
 @Controller
-/*@RequestMapping("user/user/userSetting.do")*/
 public class UserSettingController {
 	private UserMainService umService;
 	
@@ -59,8 +59,6 @@ public class UserSettingController {
 			return mav;
 		}
 		mav.addObject("mbBean", mbBean);
-		/*mav.addObject("pwd", mbBean.getPwd());
-		System.out.println("mbBean.getPwd()="+mbBean.getPwd());*/
 		mav.setViewName("/user/user/userSetting");
 		return mav;
 	}
@@ -84,6 +82,7 @@ public class UserSettingController {
 		}//
 
 //아이콘업로드
+		
 		//사용자가 업로드하려고 선택한 파일-임시파일 형태
 		MultipartFile tempFile = mbBean.getUploadIcon();
 		System.out.println("up로드아이콘="+mbBean.getUploadIcon());
@@ -95,19 +94,26 @@ public class UserSettingController {
 		String iconName = tempFile.getOriginalFilename();
 		
 		//업로드 경로-실제 물리적인 경로 구하기
-		String upPath = Utility.MY_ICON;
+		//임시 파일 path
+		String junkPath = Utility.JUNK_FILES_PATH;
+
+		//view 파일 path
+		String viewPath = Utility.MY_ICON;
 		
 	//업로드한 파일이 있는경우에만 처리
 	if(tempFile != null && !tempFile.isEmpty()){	
 		
+		/*ArrayList<String> iconList = null;*/
 		//파일이름이 중복되는 경우, 유일한 이름으로 변경하자=>  _일련번호
-		myIcon = Utility.getUniqueFileName(upPath, iconName);
+		myIcon = Utility.getUniqueFileName(junkPath, iconName, userid);
+		
+		/*myIcon = iconList.get(iconList.size() -1);*/ 
 		
 		iconSize = tempFile.getSize();
 		System.out.println("파일 사이즈="+iconSize);
 		
 		//파일 업로드 처리
-		File myfile = new File(upPath, myIcon);
+		File myfile = new File(viewPath, myIcon);
 		
 		try{
 			tempFile.transferTo(myfile);
@@ -120,41 +126,6 @@ public class UserSettingController {
 			e.printStackTrace();
 		}
 	}
-	
-//BG업로드
-/*	MultipartFile bgFile = mbBean.getUploadBG();
-	System.out.println("BG업로드"+mbBean.getUploadBG());
-	
-	//bgSize
-	long bgSize=0;
-	
-	//bg파일 선택-원본
-	String bgName=bgFile.getOriginalFilename();
-
-	//bg파일 경로
-	String bgPath = Utility.MY_BG;
-	
-	//파일이 있는 경우에만 처리
-	if(bgFile !=null && !bgFile.isEmpty()){
-		//이름 중복처리
-		bg = Utility.getUniqueFileName(bgPath, bgName);
-		bgSize = bgFile.getSize();
-		
-		//파일 업로드
-		File myBg = new File(bgPath, bg);
-		
-		try{
-			bgFile.transferTo(myBg);
-			System.out.println("bg업로드 성공"+bgFile);
-		}catch(IllegalStateException e){
-			System.out.println("bg업로드 실패");
-			e.printStackTrace();
-		}catch(IOException e){
-			System.out.println();
-			e.printStackTrace();
-		}
-	}
-	*/
 	
 	
 //비밀번호	

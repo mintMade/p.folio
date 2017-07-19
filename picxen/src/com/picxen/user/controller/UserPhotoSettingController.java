@@ -71,7 +71,7 @@ public class UserPhotoSettingController {
 			/*ptBean = ptService.viewPhoto(ptNo);*///이미지수정		
 						
 			if(ptList != null && !ptList.isEmpty()){//ptList에 값이 있을 경우(Timestamp를 String으로 변환후 중복제거리스트 넘기기및 기타뻘리스트) 
-				for(int i=0; i<ptList.size();i++){ //향상된 for문은 수정불가
+				for(int i=0; i<ptList.size();i++){ //다른 for문 수정불가
 					
 					ptBean = (PhotoBean)ptList.get(i);
 					Date rDate = ptBean.getRegdate();//Timestamp를 Date로 변환

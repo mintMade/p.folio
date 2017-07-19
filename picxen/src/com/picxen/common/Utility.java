@@ -1,6 +1,11 @@
 package com.picxen.common;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class Utility {
 	public static final String UPLOAD_PATH
@@ -26,7 +31,11 @@ public class Utility {
 	
 	/*="/usr/share/tomcat8/webapps/picxen/my_bg";*/ //EC2
 	
-	public static String getUniqueFileName(String uploadPath, String fileName){
+	public static final String JUNK_FILES_PATH
+	="G:\\project\\PN2\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\picxen\\junk_Files";
+	
+	public static String getUniqueFileName(String uploadPath, String fileName, String uid){
+		
 		//동일 이름의 경우 일련번호를 붙여서 이름을 변경해주는 메서드
 		//test.txt => test_1.txt => test_2.txt =>test_3.txt
 		//확장자를 제외한 이름만 추출 test
@@ -39,38 +48,63 @@ public class Utility {
 		String ext = fileName.substring(idx);//.txt 뒤에 string
 		System.out.println("fName="+fName+",ext="+ext);
 		
-		//업로드 폴더에 해당 파일이 존재하는지 체크 , 사이즈도 비교?
+		//삭제로그 
+		/*ArrayList<String> logList = new ArrayList<String>();*/
 		
-/*		isFile() 메소드(함수)로, 파일이 존재하는지 알아내고
-		isDirectory() 메서드로, 디렉토리가 실재하는지 알아낼 수 있습니다.
-
-		만약 파일과 디렉토리 구분 없이 판단하려면 exists() 메서드를 사용하면 됩니다.*/
+		//originalFName: FilenameFilter용
+		String oFName = fName;
 		
+		//업로드 폴더에 해당 파일이 존재 체크
 		boolean bExist=true;
 		int count=0;
 		while(bExist){
 			File myfile=new File(uploadPath, fileName);
 			if(myfile.exists()){
 				count++;
-				fileName=fName+"_"+count+ext;//test_1.txt
+				fileName=fName+"_"+uid+"_"+count+ext;//test_userid_1.jpg
 				System.out.println("변경된 파일명:"+fileName);
 				
-				//파일 지우기
-				/*if(myfile.delete()){
-					count--;
-					fileName=fName+"_"+count+ext;
-					System.out.println("지운 파일명:"+fileName);
-				}else{
-					System.out.println("지우기 실패");
-				}*/
-
+				/*logList.add(fileName);
+				System.out.println("log="+logList.size());*/
 			}else{
+				count++;
+				fileName=fName+"_"+uid+"_"+count+ext;//test_userid_1.jpg
 				bExist=false;
 			}
+			
 	}//while
+		
+		//junkFile delete
+		//업로드전 변경된 exists는 감지못하므로 이전 파일명 입력
+		/*String delFileName = logList.get(logList.size() -2);*/
+		
+		//지울 파일의 디렉토리
+		File delFileUrl = new File(uploadPath);
+		
+		//지울 파일 필터링
+		String[] delList = delFileUrl.list(new FilenameFilter() {
+			@Override
+			public boolean accept(File delFileUrl, String name) {
+				// TODO Auto-generated method stub
+				String regex =  oFName;
+				return name.matches(regex+".*");
+			}
+		} );
+		
+		System.out.println("delList.len="+delList.length);
+		
+		if(delList.length >= 1) {
+			for(int i=0; i < delList.length; i++ ) {
+				System.out.println("파일 삭제 완료="+delList[i]);
+				//logFile[i]
+				File delFiles = new File(delFileUrl, delList[i]);
+				delFiles.delete();
+			}
+		}
+		
+		System.out.println("fileName="+fileName);
 		return fileName;
-		
-		
-		
+			
 	}//getUniqueFileName
-}/////
+
+}/////public class Utility

@@ -3,18 +3,22 @@ package com.picxen.member.controller;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.picxen.common.Utility;
 import com.picxen.member.model.MemberBean;
 import com.picxen.member.model.MemberService;
+
 
 @Controller
 public class MemberEditController {
@@ -62,10 +66,11 @@ public class MemberEditController {
 	}
 	
 	@RequestMapping(value="/member/settings.do", method=RequestMethod.POST)
-	public ModelAndView editMePost(){
+	public ModelAndView editMePost(HttpServletRequest request){
 		//파라미터
 		MemberBean mbBean=null;
 		String userid=null;
+		String uid =(String)request.getAttribute("userid");
 		
 		//파일 업로드 처리
 		//사용자가 업로드하려고 선택한 파일-임시파일 형태
@@ -79,8 +84,12 @@ public class MemberEditController {
 		//upPath = session.getServletContext().getRealPath(upPath);
 		String upPath = Utility.MY_ICON;
 		
+		ArrayList<String> urlList = new ArrayList<>();
+		
 		//파일이름이 중복되는 경우, 유일한 이름으로 변경하자=>  _일련번호
-		String iconUrl=Utility.getUniqueFileName(upPath, oName);
+		String iconUrl=Utility.getUniqueFileName(upPath, oName, uid);
+		
+		/*String iconUrl =urlList.get(urlList.size() -1);*/
 		
 		//파일 업로드 처리
 		File myIcon=new File(upPath, iconUrl);
@@ -114,4 +123,4 @@ public class MemberEditController {
 	}
 	
 
-}//
+}///
