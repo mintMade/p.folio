@@ -23,16 +23,15 @@ public class CommonHandlerInterceptor extends HandlerInterceptorAdapter {
 	//setter
 	public void setCgService(CategoryService cgService){
 		this.cgService = cgService;
-		System.out.println("종속객체주입:CommonHandlerInterceptor"+"setCgService()");
 	}
 	
 	public void setMemService(MemberService memService){
 		this.memService = memService;
-		System.out.println("종속객체 주입:CommonHandlerInterceptor"+"setMemService()");
 	}
 	
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception{
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, 
+			Object handler) throws Exception{ //
 		//컨트롤러전 수행전 수행됨
 		//클라이언트 요청을 컨트롤러에 전달하기 전에 호출됨
 		System.out.println("preHandle() 메서드 호출");

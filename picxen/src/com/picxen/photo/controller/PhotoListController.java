@@ -37,8 +37,8 @@ public class PhotoListController {
 	}
 	
 		
-	//카테고리필터 검색 //////////// 삭제예정
-	@RequestMapping("/photo/photo/photoLists.do")//("/photo/photo/photoList.do")
+	//카테고리필터 검색 //출력방식 변경으로 삭제예정
+	@RequestMapping("/photo/photo/photoLists.do")//("/photo/photo/photoList.do") loot변경
 	public ModelAndView ptList(HttpServletRequest request, String cgName, String popName, 
 			String newName, String upcomName){
 		//파라미터
@@ -75,58 +75,14 @@ public class PhotoListController {
 		mav.setViewName("/photo/photo/photoLists");
 		
 		return mav;
-	}
-	
-/*	@RequestMapping("/photo/photoList.do")
-	public ModelAndView ptList(HttpServletRequest request, String cgName, String ftName){
-		System.out.println("파라미터 CategoryName="+cgName+", ftName="+ftName);
-			List<PhotoBean> ptList = null;
-		
-			CategoryBean cgBean = new CategoryBean();	
-			System.out.println("cgBean="+cgBean);
-			
-				try{
-					if(!"모두보기".equals(cgName)){
-						if(cgName != null){ 
-							cgBean = ptService.getCgBean(cgName);   /////
-							System.out.println("cgBBean="+cgBean);
-							cgBean.setFilterName(ftName);
-							System.out.println("ffftName="+ftName);
-						}
-						System.out.println("cgBena=="+cgBean);
-							ptList = ptService.listPhotoBySearch(cgBean);/////
-					}
-					if("모두보기".equals(cgName)){
-						ptList = ptService.listPhotoBySearch(cgBean);  ////
-					}
-					System.out.println("filterList출력 성공"+ptList.size());
-				}catch(SQLException e){
-					System.out.println("filterList출력 실패"+ptList);
-					e.printStackTrace();
-				}
-				
-				//제외 예정 기능(페이징)
-				int pageSize=40;
-				int blockSize=10;
-				PagingBean pb = new PagingBean(request, ptList, pageSize, blockSize);
-				PagingBean pb = new PagingBean(request, ptList, pageSize, blockSize);
-		
-				ModelAndView mav = new ModelAndView();
-				mav.addObject("alist", ptList);
-				mav.addObject("totalRecord", ptList.size());
-				mav.addObject("pb", pb); //제외 예정 파라미터(페이징)
-				mav.setViewName("/photo/photoList");
-		
-		return mav;
-	}*/ ///
+	}//출력방식 변경으로 삭제예정
 	
 	@RequestMapping("/photo/photoList.do")
-	public ModelAndView ptList(HttpServletResponse response, HttpServletRequest request, String cgName, String ftName){
-		System.out.println("파라미터 CategoryName="+cgName+", ftName="+ftName);
+	public ModelAndView ptList(HttpServletRequest request, String cgName, String ftName){
 			List<PhotoBean> ptList = null;
-		
+
 			CategoryBean cgBean = new CategoryBean();
-			//ftName 예외처리
+			//인덱스 및 메뉴에서 진입 시 order 카테고리 파라미터 없을 경우 if문 진행 
 			if(ftName==null || ftName.isEmpty()){
 				cgBean.setFilterName("pop");
 			}
@@ -136,7 +92,7 @@ public class PhotoListController {
 			System.out.println("cgBean=="+cgBean);
 			
 				try{
-					//"모두보기"는 sql db에 데이터가 없음. db를 넣을 수도 있지만, 않넣고 해보는걸로
+					//"모두보기"는 sql db에 데이터가 없음. db를 수정해서 넣을 수도 있지만, 안넣고 해보는걸로 처리
 					//select 조건에 파라미터 없이 정렬방식만 변경해서 파라미터를 ftName만 받고 order형식만 틀리게
 					if("모두보기".equals(cgName)){
 						ptList = ptService.listPhotoByAllView(cgBean);
@@ -168,7 +124,7 @@ public class PhotoListController {
 		return mav;
 	}
 	
-	
+/*  //출력방식 변경으로 삭제 예정	
 	//인기 사진 검색
 	@RequestMapping("/photo/photo/popular.do")
 	public ModelAndView ptPopList(HttpServletRequest request, String cgName){
@@ -267,7 +223,7 @@ public class PhotoListController {
 		mav.addObject("pb", pb);
 		mav.setViewName("/photo/photo/upcoming");
 		return mav;
-	}
+	}*/
 	
 
 	//search

@@ -66,15 +66,12 @@ public class LoginController {
         // 복호화
         userid = decryptRsa(privateKey, userid);
         pwd = decryptRsa(privateKey, pwd);
- 
+        
         // 개인키 삭제
         session.removeAttribute(LoginController.RSA_WEB_KEY);
  
         // 로그인 처리
-        
-      //[1]db에서 해당 아이디가 존재하는지 확인
 		int result = 0;
-		
 		try{
 			result = memberService.checkIdPwd(userid,pwd);
 			System.out.println("로그인 처리 성공!, result="+result);
@@ -119,9 +116,7 @@ public class LoginController {
 			System.out.println("예외발생 아이디 체크");
 			e.printStackTrace();
 		}
-		
-		System.out.println("userid=="+userid);
- 
+
         ModelAndView mav = new ModelAndView();
 		mav.addObject("msg", msg);
 		mav.addObject("url", url);
@@ -150,24 +145,22 @@ public class LoginController {
      * @return
      * @throws Exception
      */
-    private String decryptRsa(PrivateKey privateKey, String securedValue) throws Exception {//private null
-    	/*System.out.println("securedValue="+privateKey);*/
-        Cipher cipher = Cipher.getInstance(LoginController.RSA_INSTANCE);
-        byte[] encryptedBytes = hexToByteArray(securedValue);
-        cipher.init(Cipher.DECRYPT_MODE, privateKey);//private null
-        System.out.println("securedValue="+cipher);
-        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
-        String decryptedValue = new String(decryptedBytes, "utf-8"); // 문자 인코딩 주의.
-        
+    private String decryptRsa(PrivateKey privateKey, String securedValue) throws Exception {
+    	String decryptedValue = "";
+    	
+    	try {
+	        Cipher cipher = Cipher.getInstance(LoginController.RSA_INSTANCE);
+	        byte[] encryptedBytes = hexToByteArray(securedValue);
+	        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+	        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+	        decryptedValue = new String(decryptedBytes, "utf-8"); // 문자 인코딩 주의.
+    	}catch(Exception e) {
+    		System.out.println("decryptRsa 실패");
+    		e.printStackTrace();
+    	}
         return decryptedValue;
     }
  
-    /**
-     * 16진 문자열을 byte 배열로 변환한다.
-     * 
-     * @param hex
-     * @return
-     */
     public static byte[] hexToByteArray(String hex) {
         if (hex == null || hex.length() % 2 != 0) { return new byte[] {}; }
  
@@ -186,25 +179,30 @@ public class LoginController {
      */
     public void initRsa(HttpServletRequest request) {
         HttpSession session = request.getSession();
- 
+        
         KeyPairGenerator generator;
         try {
             generator = KeyPairGenerator.getInstance(LoginController.RSA_INSTANCE);
             generator.initialize(1024);
  
-            KeyPair keyPair = generator.genKeyPair();
+            KeyPair keyPair = generator.genKeyPair();//키 쌍
             KeyFactory keyFactory = KeyFactory.getInstance(LoginController.RSA_INSTANCE);
             PublicKey publicKey = keyPair.getPublic();
             PrivateKey privateKey = keyPair.getPrivate();
  
-            session.setAttribute(LoginController.RSA_WEB_KEY, privateKey); // session에 RSA 개인키를 세션에 저장
+            // session에 RSA 개인키를 세션에 저장
+            session.setAttribute(LoginController.RSA_WEB_KEY, privateKey); 
  
-            RSAPublicKeySpec publicSpec = (RSAPublicKeySpec) keyFactory.getKeySpec(publicKey, RSAPublicKeySpec.class);
+            RSAPublicKeySpec publicSpec = (RSAPublicKeySpec) keyFactory.getKeySpec(publicKey, 
+            		RSAPublicKeySpec.class);
             String publicKeyModulus = publicSpec.getModulus().toString(16);
             String publicKeyExponent = publicSpec.getPublicExponent().toString(16);
  
-            request.setAttribute("RSAModulus", publicKeyModulus); // rsa modulus 를 request 에 추가
-            request.setAttribute("RSAExponent", publicKeyExponent); // rsa exponent 를 request 에 추가
+            
+            
+            // rsa modulus, rsa exponent 를 request 에 추가
+            request.setAttribute("RSAModulus", publicKeyModulus); 
+            request.setAttribute("RSAExponent", publicKeyExponent); 
         } catch (Exception e) {
             // TODO Auto-generated catch block
         	System.out.println("키생성 실패"+request);

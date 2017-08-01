@@ -1,11 +1,11 @@
 package com.picxen.member.controller;
 
-import java.net.URLEncoder;
+/*import java.net.URLEncoder;*/
 import java.sql.SQLException;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+/*import javax.servlet.http.Cookie;*/
+/*import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;*/
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -45,11 +45,11 @@ public class AgreementController {
 		return mav;
 	}
 	
-	//회원가입, 가입 후 로그인
+	//회원가입
 	@RequestMapping(value="/member/agreement.do", method=RequestMethod.POST)
 	public ModelAndView postAgree(MemberBean mBean, HttpSession session){
 		//파라미터
-		System.out.println("회원가입:이메일, 비번, 이메일, 유저아이디, 이름, 패스워드 memberBean+"+mBean);
+		System.out.println("회원가입 정보 memberBean+"+mBean);
 		//db작업
 		int key = 0;
 		
@@ -57,35 +57,24 @@ public class AgreementController {
 			key = memberService.insertMember(mBean);
 			System.out.println("회원가입 성공, key="+key+"입력값="+mBean);
 		}catch(SQLException e){
-			System.out.println("회원 가입 실패"+mBean);
+			System.out.println("회원 가입 실패");
 			e.printStackTrace();
 		}
 		
 		//가입후 로그인=>홈
-		
 		String userid = mBean.getUserid();
 		String pwd = mBean.getPwd();
 		int result = 0;
 		try{
 			result = memberService.checkIdPwd(userid, pwd);
-			System.out.println("로그인 성공:userid"+userid+", pwd="+pwd);
+			System.out.println("로그인 성공:userid"+result);
+			session.setAttribute("userid", userid);
+			System.out.println("세션저장 성공");
 		}catch(SQLException e){
-			System.out.println("로그인 실패:userid="+userid+",pwd="+pwd+"result="+result);
+			System.out.println("로그인 실패");
 			e.printStackTrace();
 		}
 		
-		try{
-				//[1]세션에 아이디저장
-				session.setAttribute("userid", userid);
-				/*Cookie cookie = new Cookie("ck_userid", URLEncoder.encode(userid, "euc-kr"));*/
-				
-				System.out.println("세션저장 성공");
-		}catch(Exception e){
-			System.out.println("세션저장 실패");
-			e.printStackTrace();
-		}
-		
-		//결과뷰페이지
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("redirect:/user/user/userMain.do?userid="+userid);
 		
@@ -140,7 +129,7 @@ public class AgreementController {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("userFlag", resId);
 		mav.addObject("emailFlag", resEmail);
-		/*mav.setViewName("/member/checkId");*///팝업방식에서 바로 확인으로 변경
+		/*mav.setViewName("/member/checkId");*///팝업방식에서 Ajax 비동식 방식으로 변경
 		mav.setViewName("/member/checkId");
 		
 		return mav;

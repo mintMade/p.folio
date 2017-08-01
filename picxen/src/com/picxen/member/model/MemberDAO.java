@@ -40,8 +40,7 @@ public class MemberDAO {
 		return cnt;
 	}//아이디 중복체크
 	
-	public String checkIdPwd(String userid)
-		throws SQLException{
+	public String checkIdPwd(String userid) throws SQLException{
 		String pwd = (String)sqlMap.queryForObject("memberCheckIdPwd", userid);
 		return pwd;
 	}//로그인

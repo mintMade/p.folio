@@ -238,11 +238,13 @@
 			</form>
 			
 <!-- Top comment -->			
-		<div style="clear:both; max-width:500px; border-top: solid #cccccc 1px;">
-			<div id="gryFont" style="">
+		<div id="topLine" style="clear:both; max-width:500px; border-top: solid #cccccc 1px;">
+			<div id="gryFont" >
 			<!-- hashMap -->
 				<input type="hidden" name="userid2" id ="userid" value="${param.userid}"/>
 				<input type="hidden" name="ptNo2" id ="ptNo" value="${param.ptNo}"/>
+				<input type="hidden" name="tCmSize" value="${tCmSize}"/>
+				<input type="hidden" name="cmSize" value="${cmSize}"/>
 				
 				<c:if test="${tCmSize >= 1}">
 					<div style="padding:20px 10px 0px 63px; color:#708090; ">
@@ -258,19 +260,26 @@
 			 <!--탑 코멘트겉 테두리 float 옵션으로 테두리넘어가서 overflow: auto; 적용 -->									
 								<div class="tCmB" id="tCmBox${cnt}" data-sortNo="${mcvBean.sortNo}" style="padding:15px 0 25px 0;">
 								
+									
 			<!-- 유저아이콘 -->			<div style="float:left;">
-										<img src="${pageContext.request.contextPath }/my_icon/${mcvBean.myIcon}" id="trIcon" class="img-circle" 
-											style="width:44px; height:44px;">	
+										<a href="${pageContext.request.contextPath}/user/user/userMain.do?userid=${mcvBean.userid}">
+											<img src="${pageContext.request.contextPath }/my_icon/${mcvBean.myIcon}" id="trIcon" class="img-circle" 
+												style="width:44px; height:44px;">
+										</a>	
 									</div>
+									
 			<!-- 리플 아이디출력 -->
 									<div id="trId" style=" margin-left:63px; color:#4682b4; font-size:10pt; font-weight:bold;" >
 										<div  style="float: left; ">
-											<c:if test="${fn:length(mcvBean.userid)>=7}">
-												${fn:substring(mcvBean.userid, 0, 7)}...
-											</c:if>
-											<c:if test="${fn:length(mcvBean.userid)<7 }">
-												${mcvBean.userid} 
-											</c:if>
+											<a href="${pageContext.request.contextPath }/user/user/userMain.do?userid=${mcvBean.userid}" style="text-decoration: none;">
+												<c:set var="flName" value="${mcvBean.fName} ${mcvBean.lName}" />								
+												<c:if test="${fn:length(flName)>=20}">
+													${fn:substring(flName, 0, 20)}...
+												</c:if>
+												<c:if test="${fn:length(flName)<20 }">
+												${flName}
+												</c:if>
+											</a>
 										</div>
 			<!-- 리플화살표/아이디 보류-->						
 											<%-- <div id="arrowId_${mcvBean.sortNo }" style="visibility:visible; ">
@@ -403,21 +412,25 @@
 								<div class="cmB" data-sortNo="${mcvBean.sortNo}" id="cmBox${cn}" style="overflow: auto; margin-top:20px;">
 								
 			<!-- 유저아이콘 -->			<div style="float:left;">
+										<a href="${pageContext.request.contextPath }/user/user/userMain.do?userid=${mcvBean.userid}">
 											<img src="${pageContext.request.contextPath }/my_icon/${mcvBean.myIcon}" id="rIcon" class="img-circle"  
 												style=" width:44px; height:44px;">
+										</a>
 									</div>
 			
 			<!--아이디간격 -->			
-			<!-- 리플 아이디출력 -->
+			<!-- 리플 아이디출력 --><!-- 유저아이디 15자 넘으면 이후글자 말줄임표 --><!-- 회원가입에서 20varchar넘으면에에러수정 -->
 									<div id="trId" style="margin-left:63px; color:#4682b4; font-size:10pt; font-weight:bold;" >
 										<div  style="float: left; ">
-											<c:if test="${fn:length(mcvBean.userid)>=7}">
-											<!-- 유저아이디 15자 넘으면 이후글자 말줄임표 --><!-- 회원가입에서 20varchar넘으면에에러수정 -->
-												${fn:substring(mcvBean.userid, 0, 7)}...
-											</c:if>
-											<c:if test="${fn:length(mcvBean.userid)<7 }">
-											${mcvBean.userid} 
-											</c:if>
+											<a href="${pageContext.request.contextPath }/user/user/userMain.do?userid=${mcvBean.userid}" style="text-decoration: none;">
+												<c:set var="flName" value="${mcvBean.fName} ${mcvBean.lName}" />								
+												<c:if test="${fn:length(flName)>=20}">
+													${fn:substring(flName, 0, 20)}...
+												</c:if>
+												<c:if test="${fn:length(flName)<20 }">
+												${flName}
+												</c:if>
+											</a>
 										</div>
 									</div>
 				
@@ -556,14 +569,19 @@ $(".ptComment").click(function(){
 	}
 });
 
-/* $(document).ready(function(){//리플->리플시 창사이즈 및 뒤로밀리기
-	if($(".tCmB").not("[data-sortNo$='0']")){
-		var g = $(".tCmB").not("[data-sortNo$='0']");
-		
-		$(g).css("margin-left", "20px").find('#trIcon').width(50).height(50);		
-		$(g).css("width", "730px").find("#trId").css("margin-left", "60px");
+$(document).ready(function(){
+	var topSize = $('input[name="tCmSize"]').val();
+	var commonSize = $('input[name="cmSize"]').val();
+	if(topSize == 0){
+		$("#topLine").css('border-top', '');
+	}else{
+		$("#topLine").css('border-top', 'solid #cccccc 1px');
 	};
-}); */
-	
+	if(commonSize == 0){
+		$(".commentDiv").css('border-top', '');
+	}else{
+		$(".commentDiv").css('border-top', 'solid #cccccc 1px');
+	};
+});
 
 </script>

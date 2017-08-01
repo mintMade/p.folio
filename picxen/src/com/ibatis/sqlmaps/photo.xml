@@ -96,11 +96,8 @@
 		</isEmpty>
 			<isNotEmpty property="categoryName"><!--   -->
 				<isEqual property="categoryName" compareValue="categoryName">
-					<!-- select * from photos
-						where publicset <![CDATA[<>]]> 1 -->
 					select * from category where categoryName=#categoryName#
 				</isEqual>
-				
 				<isNotEqual property="categoryName" compareValue="categoryName">
 					select * from photos p, category c
 					where p.categoryNo = c.categoryNo

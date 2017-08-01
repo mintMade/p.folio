@@ -1,2 +1,3 @@
 select * from photos where uploader = 'w'
-select photoNo from photos
+select * from member;
+select * from category order by categoryOrder

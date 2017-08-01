@@ -47,39 +47,33 @@
 <form  class="form-horizontal" name="frmLogin" method="post" action="${pageContext.request.contextPath }/member/login.do" onsubmit="return send()">
 	<input type="hidden" id="RSAModulus" value="${RSAModulus}">
 	<input type="hidden" id="RSAExponent" value="${RSAExponent}">
-	
-	<div class="container" style="padding:0 60px 30px 30px;">
-		<div style="padding:0 0 20px 0;">
-			<h3>로그인</h3>
+		<div class="loginBoxText" style=" ">
+			<h4>로그인</h4>
 		</div>
-
-		<div class="form-group">
-			<div class="col-xs-10">
+	<!-- <div class="container" style="padding:0 60px 30px 30px;"> -->
+	<div class="container" style="">
+		<div class="form-group" style=" text-align:center;">
+			<div class="col-xs-10" style="">
 				<input type="text" class="form-control" id="usr" name="userid" value="${cookie.ck_userid.value}" placeholder="아이디">
 			</div>
-		</div>
-		
-		<div class="form-group">
-			<div class="col-xs-10">
+
+			<div class="col-xs-10" style="">
 				<input type="password" class="form-control" id="usrPwd" name="usrPwd" onkeydown="enterProc()" placeholder="비밀번호">
 			</div>
-		</div>
-		
-		<div class="form-group">
-			<div class="col-xs-10">
-				<label>
-					<input type="checkbox" name="idsave" 
-						<c:if test="${cookie.ck_userid != null && !empty cookie.ck_userid}">checked</c:if>>  아이디 저장
-				</label>
+
+			<div style="display:table; margin:0 auto;">
+				<div class="" style=" margin-bottom:10px;">
+					<label style="color:#808080; ">
+						<input type="checkbox" name="idsave" style="vertical-align:-2px;"
+							<c:if test="${cookie.ck_userid != null && !empty cookie.ck_userid}">checked</c:if>> 아이디 저장
+					</label>
+				</div>
+	
+				<div class="" style=" margin-bottom:10px;">
+					<span><input type="button" class="btn btn-logi " value="로그인" onclick="send()"></span>
+				</div>
 			</div>
 		</div>
-		
-		<div class="form-group">
-			<div class="col-xs-10">
-				<span><input type="button" class="btn btn-logi " value="로그인" onclick="send()"></span>
-			</div>
-		</div>
-		
 	</div>
 
 	<input type="hidden" id="USER_ID" name="USER_ID" >

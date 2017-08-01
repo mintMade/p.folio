@@ -19,6 +19,7 @@ public class CategoryDAO {
 	}
 	
 	public List<CategoryBean> listCategoryAll() throws SQLException{
+		@SuppressWarnings("unchecked")
 		List<CategoryBean> list = sqlMap.queryForList("cgList");
 		return list;
 	}//listCategoryAll()

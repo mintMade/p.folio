@@ -60,6 +60,7 @@ public PhotoDAO(){
 	//proto type 삭제예정
 	public List<PhotoBean> listPhotoBySearch(CategoryBean cgBean) throws SQLException{
 		
+		@SuppressWarnings("unchecked")
 		List<PhotoBean> ptList 
 			= (List<PhotoBean>)sqlMap.queryForList("listPtBySearch", cgBean);
 		
@@ -67,11 +68,13 @@ public PhotoDAO(){
 	}
 	//alpha
 	public List<PhotoBean> listPhotoByAllView(CategoryBean cgBean) throws SQLException{
+		@SuppressWarnings("unchecked")
 		List<PhotoBean> ptList = (List<PhotoBean>)sqlMap.queryForList("listPtAll", cgBean);
 		return ptList;
 	}
 	
 	public List<PhotoBean> listPhotoByCategory(CategoryBean cgBean) throws SQLException{
+		@SuppressWarnings("unchecked")
 		List<PhotoBean> ptList=(List<PhotoBean>)sqlMap.queryForList("listPtCg", cgBean);
 		return ptList;
 	}
@@ -81,6 +84,7 @@ public PhotoDAO(){
 	//////////////////
 	
 	//2. 카테고리+인기 사진
+	@SuppressWarnings("unchecked")
 	public ArrayList<PhotoBean> listPhotoByCtPop(String cgName) throws SQLException{
 		ArrayList<PhotoBean> alist=null;
 		alist = (ArrayList<PhotoBean>)sqlMap.queryForList("ptListByPop", cgName);
