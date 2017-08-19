@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,58 +35,18 @@ public class PhotoListController {
 		this.ptService=ptService;
 		System.out.println("종속객체 주입:PhotoListController"+"-setPhotoListService()");
 	}
-	
-		
-	//카테고리필터 검색 //출력방식 변경으로 삭제예정
-	@RequestMapping("/photo/photo/photoLists.do")//("/photo/photo/photoList.do") loot변경
-	public ModelAndView ptList(HttpServletRequest request, String cgName, String popName, 
-			String newName, String upcomName){
-		//파라미터
-		System.out.println("파라미터:카테고리 이름1="+cgName+", 인기순="+popName+", 새로운순="+newName
-				+", 뜨는순="+upcomName);
-		
-		//db작업
-		ArrayList<PhotoBean> alist = null;
-		
-		try{
-			if(cgName != null && !cgName.isEmpty()){
-				//이벤트별 상품 조회
-				alist = ptService.listPhotoByCategory(cgName); //삭제 대상 xml존재하지 않음
-			}else {
-				//전체 상품 조회
-				alist = ptService.ptlistPop();
-			}
-			System.out.println("사진 리스트 로딩 성공:기본인기사진 리스트 사이즈"+alist.size());
-		}catch(SQLException e){
-			System.out.println("카테고리 사진리스트 로딩 실패"+alist);
-			e.printStackTrace();
-		}
-		
-		//결과 뷰
-		//페이징
-		int pageSize=40;
-		int blockSize=10;
-		PagingBean pb = new PagingBean(request, alist, pageSize, blockSize);
-		
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("alist", alist);
-		mav.addObject("totalRecord", alist.size());
-		mav.addObject("pb", pb);
-		mav.setViewName("/photo/photo/photoLists");
-		
-		return mav;
-	}//출력방식 변경으로 삭제예정
-	
-	@RequestMapping("/photo/photoList.do")
-	public ModelAndView ptList(HttpServletRequest request, String cgName, String ftName){
-			List<PhotoBean> ptList = null;
 
+	//리스트 출력 방식 변경 (이전버전은 카테고리별로 메소드가 많았으나 통합으로 처리)
+	@RequestMapping(value="/photo/photoList.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView ptList(HttpServletRequest request, String cgName, String sort){
+			List<PhotoBean> ptList = null;
+			
 			CategoryBean cgBean = new CategoryBean();
 			//인덱스 및 메뉴에서 진입 시 order 카테고리 파라미터 없을 경우 if문 진행 
-			if(ftName==null || ftName.isEmpty()){
-				cgBean.setFilterName("pop");
+			if(sort==null || sort.isEmpty()){
+				cgBean.setSort("pop");
 			}
-			cgBean.setFilterName(ftName);
+			cgBean.setSort(sort);
 			cgBean.setCategoryName(cgName);
 			
 			System.out.println("cgBean=="+cgBean);
@@ -103,9 +63,9 @@ public class PhotoListController {
 						ptList = ptService.listPhotoByAllView(cgBean);
 					}
 					
-					System.out.println("filterList출력 성공"+ptList.size());
+					System.out.println("ptList출력 성공"+ptList.size());
 				}catch(SQLException e){
-					System.out.println("filterList출력 실패"+ptList);
+					System.out.println("ptList출력 실패");
 					e.printStackTrace();
 				}
 				
@@ -119,112 +79,12 @@ public class PhotoListController {
 				mav.addObject("alist", ptList);
 				mav.addObject("totalRecord", ptList.size());
 				mav.addObject("pb", pb); //제외 예정 파라미터(페이징)
+				mav.addObject("cgName", cgName);//테스트
+				mav.addObject("sort", sort);
 				mav.setViewName("/photo/photoList");
 		
 		return mav;
 	}
-	
-/*  //출력방식 변경으로 삭제 예정	
-	//인기 사진 검색
-	@RequestMapping("/photo/photo/popular.do")
-	public ModelAndView ptPopList(HttpServletRequest request, String cgName){
-	System.out.println("인기사진 카테고리="+cgName);
-	ArrayList<PhotoBean> alist = null;
-	
-	try{
-		if("모두보기".equals(cgName)){
-			alist=ptService.listPhotoByPop();	
-		}else if(cgName != null && !cgName.isEmpty()){
-			alist=ptService.listPhotoByCtPop(cgName);
-		}else{
-			alist=ptService.listPhotoByPop();
-		}
-		System.out.println("인기 사진 로딩 성공="+alist.size());
-	}catch(SQLException e){
-		System.out.println("인기 사진 로딩 실패"+alist);
-		e.printStackTrace();
-	}
-	
-	int pageSize=10;
-	int blockSize=10;
-	PagingBean pb = new PagingBean(request, alist, pageSize, blockSize);
-	System.out.println("pb="+pb);
-	
-	ModelAndView mav = new ModelAndView();
-	mav.addObject("alist", alist);
-	mav.addObject("cgName", cgName);
-	mav.addObject("totalRecord", alist.size());
-	mav.addObject("pb", pb);
-	mav.setViewName("/photo/photo/popular");
-	
-	return mav;
-	}
-	
-	//새로운 사진 검색
-	@RequestMapping("/photo/photo/new.do")
-	public ModelAndView ptNewList(HttpServletRequest request, String cgName){
-		System.out.println("새로운 사진 카테고리 파라미터"+cgName);
-		ArrayList<PhotoBean> alist=null;
-		try{
-			if("모두보기".equals(cgName)){
-				alist=ptService.listPhotoByNew();	
-			}else if(cgName != null && !cgName.isEmpty()){
-				alist=ptService.listPhotoByCtNew(cgName);
-			}else{
-				alist=ptService.listPhotoByNew();
-			}
-			System.out.println("새로운사진 로딩 성공"+alist.size());
-		}catch(SQLException e){
-			System.out.println("새로운사진 로딩실패"+alist);
-			e.printStackTrace();
-		}
-		int pageSize = 40;
-		int blockSize = 10;
-		PagingBean pb = new PagingBean(request, alist, pageSize, blockSize);
-		
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("alist", alist);
-		mav.addObject("cgName", cgName);
-		mav.addObject("totalRocord", alist.size());
-		mav.addObject("pb",pb);
-		mav.setViewName("/photo/photo/new");
-		
-		return mav;
-	}
-	
-	
-	//뜨고있는 사진 검색
-	@RequestMapping("/photo/photo/upcoming.do")
-	public ModelAndView ptUpcomList(HttpServletRequest request, String cgName){
-		System.out.println("뜨는사진파라미터"+cgName);
-		ArrayList<PhotoBean> alist = null;
-		try{
-			if("모두보기".equals(cgName)){
-				alist=ptService.listPhotoByUpCom();
-			}else if(cgName != null && !cgName.isEmpty()){
-				alist=ptService.listPhotoByCtUpcom(cgName);
-			}else{
-				alist=ptService.listPhotoByUpCom();
-			}
-			System.out.println("뜨는 사진 로딩 성공"+alist.size());
-		}catch(SQLException e){
-			System.out.println("뜨는 사진 로딩 실패"+alist);
-			e.printStackTrace();
-		}
-		
-		int pageSize = 40;
-		int blockSize =10;
-		PagingBean pb = new PagingBean(request, alist, pageSize, blockSize);
-		
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("alist", alist);
-		mav.addObject("cgName", cgName);
-		mav.addObject("totalRecord", alist.size());
-		mav.addObject("pb", pb);
-		mav.setViewName("/photo/photo/upcoming");
-		return mav;
-	}*/
-	
 
 	//search
 	@RequestMapping("/photo/photo/ptSearchResult.do")
@@ -234,6 +94,7 @@ public class PhotoListController {
 		
 		//db작업
 		ArrayList <PhotoBean> alist= null;
+		CategoryBean cgBean = new CategoryBean();
 		
 		try{
 			if(kword != null && !kword.isEmpty()){
@@ -241,7 +102,7 @@ public class PhotoListController {
 				alist = (ArrayList<PhotoBean>)ptService.searchPtTag(kword);
 			}else{
 				//모두 검색
-				alist = (ArrayList<PhotoBean>)ptService.listPhotoAll();
+				alist = (ArrayList<PhotoBean>)ptService.listPhotoByAllView(cgBean);
 			}
 			System.out.println("사진 검색 성공(tag, 타이틀 기반)="+alist);
 		}catch(Exception e){
@@ -265,4 +126,4 @@ public class PhotoListController {
 		return mav;
 	}
 	
-}/////////
+}//class

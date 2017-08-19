@@ -43,7 +43,7 @@
 			<div style="margin: 20px 0px 20px 0px;/* float:left; */  /* border: 1px solid blue; */">
 				<h4 style="/* font-weight:bold; color:#555555; */">기억의 순간</h4>
 					<div id="idx_Page_view_Menu" style="max-width:250px; /* border: 1px solid red; */">다양한 추억의 순간을 소셜친구와 공유합니다.</div><br>
-				<a href="${pageContext.request.contextPath}/photo/photoList.do?ftName=pop" id="subtn2" class="btn btn-sub-start" style="">구경하기</a><br>
+				<a href="${pageContext.request.contextPath}/photo/photoList.do?sort=pop" id="subtn2" class="btn btn-sub-start" style="">구경하기</a><br>
 			</div>
 		</div>
 	</div>
@@ -61,16 +61,6 @@
 
 <script type="text/javascript">
 /*RESIZE  */
-
-
-/* $(document).ready( function(){
-	$('#idx_Page_upload_Menu').height($('#idx_Page_view_Menu').height());
-		$(window).resize( function(){
-			$('#idx_Page_upload_Menu').height($('#idx_Page_view_Menu').height());	
-		});
-}); */
-
-
 	
 	$(document).ready(function(){
 		$(window).resize(function(){

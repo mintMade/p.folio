@@ -20,9 +20,9 @@ public class IpLogDAO {
 	
 	//¸Þ¼­µå
 	public int insertPtlog(IpLogBean ilBean) throws SQLException{
-		int key = 0;
-		key = (Integer)sqlMap.insert("ipInsert", ilBean);
-		return key;
+		int k = 0;
+		k = sqlMap.update("ipInsert", ilBean);
+		return k;
 	}//insertPtlog()
 	
 }///

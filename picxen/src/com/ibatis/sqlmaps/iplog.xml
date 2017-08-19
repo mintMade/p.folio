@@ -5,16 +5,19 @@
     
 <sqlMap namespace="iplog">
 	<typeAlias alias="ilBean" type="com.picxen.log.model.IpLogBean"/>
-
-<insert id="ipInsert" parameterClass="ilBean">
-	<selectKey keyProperty="logNo" resultClass="int">
-		select iplog_seq.nextval from dual
-	</selectKey>
-		insert into iplog(logNo, userid, ip, ptNo)
-			values(#logNo#, #userid#, #ip#, #ptNo#)
-</insert>
-
-
+	
+	 <update id="ipInsert" parameterClass="ilBean">
+		<![CDATA[MERGE INTO iplog g
+					using Dual
+					on ((ptNo = #ptNo# and ip = #ip#))
+					WHEN MATCHED THEN
+        				Update set g.userid = #userid#
+        				where g.userid IS NULL
+					WHEN NOT MATCHED THEN]]>
+						Insert (logNo, userid, ip, ptNo)
+						values (iplog_seq.nextval, #userid#, #ip#, #ptNo#)
+	</update> 
+	    
 <!-- private int logNo;
 	private String userid;
 	private String ip;

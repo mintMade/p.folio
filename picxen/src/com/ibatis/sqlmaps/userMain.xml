@@ -59,15 +59,15 @@
 	</update>
 	
 	<select id="userLikeTotal" parameterClass="String" resultClass="int">
-		select count(likeCNT) from photos where uploader =#userid#
+		select sum(likeCNT) from photos where uploader =#userid#
 	</select>
 	
 	<select id="userViewTotal" parameterClass="String" resultClass="int">
-		select count(viewCnt) from photos where uploader =#userid#
+		select sum(viewCnt) from photos where uploader =#userid#
 	</select>
 	
 	<select id="userFaveTotal" parameterClass="String" resultClass="int">
-		select count(faves) from photos where uploader =#userid# 
+		select sum(faves) from photos where uploader =#userid# 
 	</select>
 	
 	<select id="albumList" parameterClass="String" resultClass="ptBean">

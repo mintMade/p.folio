@@ -11,24 +11,6 @@
 		System.out.println(lIsLogin);
 		System.out.println(lUserid);
 	%>
-	<%-- <%=(String)session.getAttribute("userid") %> --%>
-
-	<%String ip=request.getHeader("x-forwarded-for");
-	
-	if(ip==null||ip.length()==0){
-		ip=request.getHeader("Proxy-Client-IP");
-	}
-	
-	if(ip==null||ip.length()==0){
-		ip=request.getHeader("WL-Proxy-Client-IP");
-	}
-
-	if(ip==null||ip.length()==0){
-		ip=request.getRemoteAddr();
-		System.out.println("ptIp="+ip);
-		
-	}//ip확인  ip파라미터
-	%>
 <head>
 	<link rel="stylesheet" type="text/css" href="<c:url value='/css/mainstyle.css' />">
 </head>
@@ -53,7 +35,7 @@
 			<c:set var="ptBean" value="${ptTagList[i-1]}"/>
      <div class="col-lg-3 col-md-3 col-sm-6 col-md-4" style="">
     		<div class="row" style="margin: 10px -3px 10px -3px;">
-    		<a href ="${pageContext.request.contextPath}/photo/photo/photoCountUpdate.do?ptNo=${ptBean.photoNo}&userid=${userid}&sort=pop&ip=<%=ip %>" >
+    		<a href ="${pageContext.request.contextPath}/photo/photo/photoCountUpdate.do?ptNo=${ptBean.photoNo}&userid=${userid}&sort=${sort}&cgName=${cgName}" >
     			<div class="ratio" style="background-image:url('${pageContext.request.contextPath}/pt_images/${ptBean.imageURL}');">
     				<div class="caption">
     					<fmt:formatNumber value="${ptBean.popular}" type="Number" pattern="###.#" />
@@ -61,7 +43,7 @@
     					<img src="${pageContext.request.contextPath}/pt_images/${ptBean.imageURL}">
     			</div>
     		</a>
-  				<a href="${pageContext.request.contextPath }/photo/photo/photoCountUpdate.do?ptNo=${ptBean.photoNo}&userid=${userid}&sort=pop&ip=<%=ip %>" 
+  				<a href="${pageContext.request.contextPath }/photo/photo/photoCountUpdate.do?ptNo=${ptBean.photoNo}&userid=${userid}&sort=${sort}&cgName=${cgName}"
   					class="btn btn-poplistT btn-xs" style=" color:#ffffff;" >${ptBean.photoTitle}</a>  						   				
   				<a href="${pageContext.request.contextPath }/user/user/userMain.do?userid=${ptBean.uploader}" 
   					class="btn btn-poplistB btn-xs" style=" color:#ffffff; " >${ptBean.uploader}</a>

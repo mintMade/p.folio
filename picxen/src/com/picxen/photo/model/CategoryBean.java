@@ -6,16 +6,16 @@ public class CategoryBean {
 	private int categoryOrder;
 	
 	//pop new upcom filter name
-	private String filterName;
+	private String sort;
 	
 	
 	
 	
-	public String getFilterName() {
-		return filterName;
+	public String getSort() {
+		return sort;
 	}
-	public void setFilterName(String filterName) {
-		this.filterName = filterName;
+	public void setSort(String sort) {
+		this.sort = sort;
 	}
 	public int getCategoryNo() {
 		return categoryNo;
@@ -40,7 +40,7 @@ public class CategoryBean {
 	public String toString() {
 		return "CategoryBean [categoryNo=" + categoryNo + ", categoryName="
 				+ categoryName + ", categoryOrder=" + categoryOrder
-				+ ", filterName=" + filterName + "]";
+				+ ", sort=" + sort + "]";
 	}
 	
 	

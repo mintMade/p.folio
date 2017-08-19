@@ -1071,6 +1071,10 @@ background-color:white;
 		font-family:impact !important;	
 	} /* score font */
 	
+	#rankScore {
+		font-family:impact !important;	
+	} /* score font */
+	
  	#gryFont{
  	 font-size:13px;
  	 font-weight:bold !important;

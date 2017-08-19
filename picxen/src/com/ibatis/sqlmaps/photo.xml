@@ -14,27 +14,6 @@
 	<select id="cgList" resultClass="cgBean">
 		select * from category order by categoryOrder
 	</select>
-	
-	<!-- 카테고리별 사진리스트 + 인기사진 소팅 -->
-	<select id="ptListByPop" parameterClass="String" resultClass="ptBean">
-		select * from photos p, category c
-            where p.categoryNo = c.categoryNo  
-            and categoryName=#cgName# and publicset <![CDATA[<>]]> 1 order by popular desc, regdate desc
-	</select>
-	
-	<!-- 카테고리+새로올라온 사진 -->
-	<select id="ptListByNew" parameterClass="String" resultClass="ptBean">
-		select * from photos p, category c
-    		where p.categoryNo = c.categoryNo 
-    		and categoryName=#cgName# and publicset <![CDATA[<>]]> 1 order by regdate desc
-	</select>
-	
-	<!-- 카테고리+뜨는사진 -->
-	<select id="ptListByUpcom" parameterClass="String" resultClass="ptBean">
-		select * from photos p, category c   
-   			where p.categoryNo = c.categoryNo and categoryName=#cgName# and publicset <![CDATA[<>]]> 1 
-        	and regdate >= sysdate-1 order by popular desc, regdate desc
-	</select>
 
 
 <!-- reNEW ptList 삭제예정-->
@@ -56,21 +35,23 @@
 	</select>
 <!-- /reNEW ptList-->
 
+
+
 <!-- alpha -->
 
 	<sql id="order.dynamic">
-		<isNotEmpty property="filterName">
-			<isEqual property="filterName" compareValue="pop">
+		<isNotEmpty property="sort">
+			<isEqual property="sort" compareValue="pop">
 				order by popular desc,
 			</isEqual>
-			<isEqual property="filterName" compareValue="new">
+			<isEqual property="sort" compareValue="new">
 				order by
 			</isEqual>
-			<isEqual property="filterName" compareValue="upcom">
+			<isEqual property="sort" compareValue="upcom">
 				and regdate <![CDATA[>=]]> sysdate-1 order by popular desc,
 			</isEqual>
 		</isNotEmpty>
-		<isEmpty property="filterName">
+		<isEmpty property="sort">
 			order by popular desc,
 		</isEmpty>
 	</sql>
@@ -84,48 +65,15 @@
 	<select id="listPtCg" parameterClass="cgBean" resultClass="ptBean">
 		select * from photos p, category c
             where p.categoryNo = c.categoryNo  
-            and categoryName=#categoryName# and publicset <![CDATA[<>]]> 1 
+            <!-- and categoryName=#categoryName# and publicset <![CDATA[<>]]> 1 --> 
+            and categoryName like '%' || #categoryName# || '%' 
+            	and publicset <![CDATA[<>]]> 1 
 		<include refid="order.dynamic" />            
             regdate desc
 	</select>
-<!-- alpha -->		
-
-	<select id="listPtBySearcha" parameterClass="cgBean" resultClass="ptBean">
-		<isEmpty property="categoryName">
-			select * from photos
-		</isEmpty>
-			<isNotEmpty property="categoryName"><!--   -->
-				<isEqual property="categoryName" compareValue="categoryName">
-					select * from category where categoryName=#categoryName#
-				</isEqual>
-				<isNotEqual property="categoryName" compareValue="categoryName">
-					select * from photos p, category c
-					where p.categoryNo = c.categoryNo
-							and categoryName = #categoryName# and publicset <![CDATA[<>]]> 1 
-				</isNotEqual>
-					
-			</isNotEmpty>
-			where publicset <![CDATA[<>]]> 1 order by popular desc, regdate desc
-	</select>
-
-
-
-	<!-- 기본 및 인기 -->
-	<select id="ptPopList" resultClass="ptBean">
-		<!-- 인기순/날짜순 출력 -->
-		select * from photos where publicset <![CDATA[<>]]> 1 order by popular desc, regdate desc
-	</select>
-		
-	<!-- 새로운 사진 -->
-	<select id="ptNewList" resultClass="ptBean">
-		select * from photos where publicset <![CDATA[<>]]> 1 order by regdate desc
-	</select>
 	
-	<!-- ptUpcomList뜨고있는 -->
-	<select id="ptUpcomList" resultClass="ptBean">
-		select * from photos where publicset <![CDATA[<>]]> 1 and regdate <![CDATA[>=]]> sysdate-1 order by popular desc, regdate desc <!-- 하루전과 같거나 이후시간  -->
-	</select>
-		
+<!-- alpha -->		
+	
 	<select id="ptListByEvent" parameterClass="string" resultClass="ptBean"><!-- 삭제 대상 이벤트 사용않함 -->
 		select p.* from photos p, eventPhoto e
 			where p.photoNo = e.photoNo 
@@ -145,10 +93,10 @@
 	</insert>
 	
 	<!-- 구경하기외 메인등에서 접근할때 -->
-	<select id="ptListAll" resultClass="ptBean">
-		<!-- 노출가능한 사진만 출력  -->
+<!-- 	<select id="ptListAll" resultClass="ptBean">
+		노출가능한 사진만 출력 
 		select * from photos where publicset <![CDATA[<>]]>1 order by regdate desc
-	</select>
+	</select> -->
 	
 	<select id="ptDetail" parameterClass="int" resultClass="ptBean">
 		select * from photos where photoNo=#ptNo#
@@ -163,8 +111,8 @@
 	
 	<update id="ptViewCnt" parameterClass="ilBean">
 		update photos set viewCnt=viewCnt+1
-  		  where photoNo=#ptNo# and
-  		  	(select count(*) from iplog where ip=#ip# and ptNo=#ptNo#) <![CDATA[<]]>=1 <!-- 테스트아이피 중복으로 조건에 충족해도 카운트가 안올라가는것 -->
+  		  where photoNo=#ptNo# 
+  		  and NOT EXISTS (select 1 from iplog where ptNo=#ptNo# and ip=#ip# )
 	</update>	
 	
 	<update id="ptLikeCnt" parameterClass="pLikeBean">
@@ -179,9 +127,9 @@
 		</selectKey>
 		insert into likeCnt (likeNo, ptNo, userid)
     		select likeCnt_seq.nextval, #ptNo#, #userid#
-		    from dual
+		    from dual 
 		    where (select count(*) from likeCnt where userId=#userid# and ptNo=#ptNo#) = 0
-	</insert>
+	</insert><!-- 동일 테이블에 값이 없을경우 insert -->
 	
 	<procedure id="prcdLike_pop" parameterClass="pLikeBean">
 		{call procedure_pop(#ptNo#)}

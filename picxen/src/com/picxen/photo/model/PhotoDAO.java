@@ -31,9 +31,8 @@ public PhotoDAO(){
 		//이벤트별 상품목록 조회하기
 		//new에 해당하는 상품목록, BEST, MD
 	
-		ArrayList<PhotoBean> alist
-=(ArrayList<PhotoBean>)sqlMap.queryForList("ptListByEvent", evntName);
-		
+		@SuppressWarnings("unchecked")
+		ArrayList<PhotoBean> alist=(ArrayList<PhotoBean>)sqlMap.queryForList("ptListByEvent", evntName);
 		return alist;
 	}//listPhotoByEvent()
 	
@@ -42,30 +41,13 @@ public PhotoDAO(){
 		return key;
 	}//uploadPhoto()
 	
-	//1. 기본 카테고리 삭제 대상 //"ptListByCg"를 pop으로 변경해서 적용 xml에는 해당 아이디없음
-	//2. 쿼리 및 메소드 간소화 변경으로 삭제 예정20170607
-	public ArrayList<PhotoBean> listPhotoByCategory(String cgName) throws SQLException{
-		ArrayList<PhotoBean> alist 
-			= (ArrayList<PhotoBean>)sqlMap.queryForList("ptListByCg", cgName);
-		return alist;
-	}//listPhotoCategory()
-	
-	
 	//위에서 변경된 메소드
 	public CategoryBean getCgBean(String cgName) throws SQLException{
 		CategoryBean cgBean = (CategoryBean)sqlMap.queryForObject("getCgBean",cgName);
 		return cgBean;
 	}
 	
-	//proto type 삭제예정
-	public List<PhotoBean> listPhotoBySearch(CategoryBean cgBean) throws SQLException{
-		
-		@SuppressWarnings("unchecked")
-		List<PhotoBean> ptList 
-			= (List<PhotoBean>)sqlMap.queryForList("listPtBySearch", cgBean);
-		
-		return ptList;
-	}
+
 	//alpha
 	public List<PhotoBean> listPhotoByAllView(CategoryBean cgBean) throws SQLException{
 		@SuppressWarnings("unchecked")
@@ -81,75 +63,9 @@ public PhotoDAO(){
 	
 	////alpha
 	
-	//////////////////
-	
-	//2. 카테고리+인기 사진
-	@SuppressWarnings("unchecked")
-	public ArrayList<PhotoBean> listPhotoByCtPop(String cgName) throws SQLException{
-		ArrayList<PhotoBean> alist=null;
-		alist = (ArrayList<PhotoBean>)sqlMap.queryForList("ptListByPop", cgName);
-		
-		return alist;
-	}
-	
-	//3. 카테고리+새로올라온 사진
-	public ArrayList<PhotoBean> listPhotoByCtNew(String cgName) throws SQLException{
-		ArrayList<PhotoBean> alist = (ArrayList<PhotoBean>)sqlMap.queryForList("ptListByNew", cgName);
-		
-		return alist;
-	}
-	
-	//4. 카테고리+신규 뜨는 사진
-	public ArrayList<PhotoBean> listPhotoByCtUpcom(String cgName) throws SQLException{
-		ArrayList<PhotoBean> alist = (ArrayList<PhotoBean>)sqlMap.queryForList("ptListByUpcom",cgName);
-		
-		return alist;
-	}
-	
-	//5. 인기사진
-	public ArrayList<PhotoBean> listPhotoByPop() throws SQLException{
-		ArrayList<PhotoBean> alist = (ArrayList<PhotoBean>)sqlMap.queryForList("ptPopList");
-		
-		return alist;
-	}
-	
-	//6 .새로올라온 사진
-	public ArrayList<PhotoBean> listPhotoByNew() throws SQLException{
-		ArrayList<PhotoBean> alist = (ArrayList<PhotoBean>)sqlMap.queryForList("ptNewList");
-		
-		return alist;
-	}
-	
-	//7. 뜨고있는 사진
-	public ArrayList<PhotoBean> listPhotoByUpCom() throws SQLException{
-		ArrayList<PhotoBean> alist = (ArrayList<PhotoBean>)sqlMap.queryForList("ptUpcomList");
-
-		return alist;		
-	}
-	
-	//인기사진 리스트 구경하기 기본
-	public ArrayList<PhotoBean> ptlistPop() throws SQLException{
-		ArrayList<PhotoBean> alist = null;
-		alist = (ArrayList<PhotoBean>)sqlMap.queryForList("ptPopList");
-		
-		return alist;
-	}//listPopList
-	
-	//index에서 로드
-	public ArrayList<PhotoBean> listPhotoAll() throws SQLException{
-		ArrayList<PhotoBean> alist
-=(ArrayList<PhotoBean>)sqlMap.queryForList("ptListAll");
-		
-		return alist;
-	}//listPhotoAll()
-	
-	/*public ArrayList<PhotoBean> searchPhoto(Map<String, String>ptMap) throws SQLException{
-		return (ArrayList<PhotoBean>)sqlMap.queryForList("searchPhoto", ptMap);
-	}//searchPhoto()
-*/	//사진 검색 맵에서 일반 검색으로 변경(현재 검색창 하나만 지원)
-	
 	public ArrayList<PhotoBean> searchPtTag(String kword) 
 		throws SQLException{
+		@SuppressWarnings("unchecked")
 		ArrayList<PhotoBean> alist 
 = (ArrayList<PhotoBean>)sqlMap.queryForList("searchPtByTag", kword);
 		return alist;
@@ -162,8 +78,9 @@ public PhotoDAO(){
 		return ptBean;
 	}//viewPhoto()
 	
-	//필요없음??
+	//수정 후적용예정
 	public ArrayList<PhotoBean> listMostPopularPhoto(int ptNo) throws SQLException{
+		@SuppressWarnings("unchecked")
 		ArrayList<PhotoBean> alist
 =(ArrayList<PhotoBean>)sqlMap.queryForList("listMostPopularPhoto", ptNo);
 		return alist;
@@ -181,38 +98,34 @@ public PhotoDAO(){
 		return n;
 	}
 	
-	public int insertLike(PhotoLikeBean plBean) throws SQLException{
+	public PhotoBean insertLike(PhotoLikeBean plBean) throws SQLException{
 		int key = 0 , n=0;
+		PhotoBean ptBean = new PhotoBean();
 		try{
 			sqlMap.startTransaction();
 			
 			n=sqlMap.update("ptLikeCnt", plBean);
 			if( n == 1){
-				key=(Integer)sqlMap.insert("insertLike", plBean);//로그가계속쌓임 나중에 1개 이상일 경우 인서트 금지 2016/7= fix 2207
+				key=(Integer)sqlMap.insert("insertLike", plBean);
 			}
+			
 			sqlMap.queryForObject("prcdLike_pop", plBean);
+			
+			//스코어 및 like카운트 갱신을 위해 ptBean 세팅
+			int ptNo = plBean.getPtNo();
+			ptBean = (PhotoBean) sqlMap.queryForObject("ptDetail", ptNo);
 			
 			sqlMap.executeBatch();
 			sqlMap.commitTransaction();
-			System.out.println("!트랜젝션성공 like insert(likeTable), update(photosTable), pop프로시져 likeCnt="+plBean+", key="+key);
+			/*System.out.println("!트랜젝션성공 pop프로시져 likeCnt="+plBean+", key="+key);*/
 			
 		}catch(SQLException e){
 			System.out.println("like 트랜젝션 실패");
 			e.printStackTrace();
 		}
 		
-		return key;
+		/*return key;*/
+		return ptBean;
 	}
-	
-
-	/*public boolean listPhotoLike(PhotoLikeBean plBean) throws SQLException{
-		boolean result=false;
-		int cnt=0;
-			cnt=(Integer)sqlMap.queryForObject("getLikeUserid", plBean);
-			if(cnt > 0){
-				result=true;
-			}
-			return result;
-	}*///checkLike(); 사용안함
 
 }/////

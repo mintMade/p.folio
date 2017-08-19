@@ -2,11 +2,13 @@ package com.picxen.controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.picxen.photo.model.CategoryBean;
 import com.picxen.photo.model.PhotoBean;
 import com.picxen.photo.model.PhotoService;
 
@@ -28,7 +30,7 @@ public class IndexController {
 	public ModelAndView getIndex(){
 		System.out.println("메인()index 페이지:getIndex()");
 		
-		//index.jsp 페이지에서 필요한 이벤트별 상품 목록을조회해서 결과를 넣어주자!!!!!!!!!!!!!!!!!!모두넣어주기bootstrap dynamic image
+		//index.jsp 사용안함 폐기대상
 		//[2]이벤트별 상품목록 조회
 		ArrayList<PhotoBean>newList=new ArrayList<PhotoBean>();
 		ArrayList<PhotoBean>bestList=new ArrayList<PhotoBean>();
@@ -46,10 +48,12 @@ public class IndexController {
 			e.printStackTrace();
 		}
 		
-		ArrayList<PhotoBean> alist = null;
+		List<PhotoBean> alist = null;
 		
 		try{
-			alist=ptService.listPhotoAll();
+			CategoryBean cgBean = new CategoryBean();
+			/*alist=ptService.listPhotoAll();*/
+			alist=ptService.listPhotoByAllView(cgBean);
 			System.out.println("메인 사진 리스트 로딩 성공");
 		}catch(SQLException e){
 			System.out.println("메인 사진 리스트 로딩 실패");

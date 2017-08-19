@@ -46,17 +46,26 @@ public class UserMainDAO {
 	}//userSetUpdate();
 	
 	public int likeTotal(String umId) throws SQLException{
-		int likeTtl=(Integer)sqlMap.queryForObject("userLikeTotal", umId);
+		Integer likeTtl=(Integer)sqlMap.queryForObject("userLikeTotal", umId);
+		if(likeTtl == null) {
+			likeTtl = 0;
+		}
 		return likeTtl;
 	}//liketotal();
 	
 	public int viewTotal(String umId) throws SQLException{
-		int viewTtl=(Integer)sqlMap.queryForObject("userViewTotal", umId);
+		Integer viewTtl=(Integer)sqlMap.queryForObject("userViewTotal", umId);
+		if(viewTtl == null) {
+			viewTtl = 0;
+		}
 		return viewTtl;
 	}//viewtotal();
 	
 	public int faveTotal(String umId) throws SQLException{
-		int faveTtl = (Integer)sqlMap.queryForObject("userFaveTotal", umId);
+		Integer faveTtl = (Integer)sqlMap.queryForObject("userFaveTotal", umId);
+		if(faveTtl == null) {
+			faveTtl = 0;
+		}
 		return faveTtl;
 	}//faveTotal();
 	

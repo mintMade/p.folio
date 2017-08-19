@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.picxen.comments.model.MemberViewBean;
 import com.picxen.faves.model.FavesBean;
 import com.picxen.faves.model.FavesService;
+import com.picxen.photo.model.PhotoBean;
 import com.picxen.photo.model.PhotoLikeBean;
 
 @Controller
@@ -29,12 +30,11 @@ public class FavesController {
 	}*/
 	
 	@RequestMapping("/photo/faves/favesAdd.do")
-	public ModelAndView insertFaves(HttpServletRequest request, HttpSession session, String fUserId, int photoNo, FavesBean fvBean, String sort){
+	public ModelAndView insertFaves(HttpServletRequest request, HttpSession session/*,*/ /*String fUserId,*//* int photoNo,*/ /*FavesBean fvBean*//*, String sort*/){
 		//파라미터
-		System.out.println("FavesController:fUserId="+fUserId+", photoNo="+photoNo+"fvBean"+fvBean+", sort="+sort);
+		System.out.println("FavesController:fUserId="/*+*//*fUserId+*//*", photoNo="+photoNo+*//*"fvBean"+fvBean*//*+", sort="+sort*/);
 		
 		ModelAndView mav = new ModelAndView();
-	
 		String userid= (String) session.getAttribute("userid");
 		if(userid==null || userid.isEmpty()){
 			mav.addObject("msg", "로그인 먼저하세요");
@@ -46,19 +46,27 @@ public class FavesController {
 		
 		//db작업
 		/*FavesBean fvBean = new FavesBean(); 즐겨찾기 추가 전에 로그인서트 후 즐겨찾기 카운트업데이트하는 방식*/
-		int key = 0;
+		String strPtNo = (String)request.getParameter("ptNo");
+		Integer ptNo = Integer.parseInt(strPtNo);
+		System.out.println("ptNo="+ptNo);
 		
+		FavesBean fvBean = new FavesBean();
+		fvBean.setfUserId(userid);
+		fvBean.setPhotoNo(ptNo);
+		PhotoBean ptBean = new PhotoBean();
+		System.out.println("fvBBean="+fvBean);
 		try{
-			key = fvService.insertFaves(fvBean);
-			System.out.println("즐겨찾기 추가 성공, key="+key+", fvBean="+fvBean);
+			ptBean = fvService.insertFaves(fvBean);
+			System.out.println("즐겨찾기 추가 성공, fvBean="+fvBean+", ptBean="+ptBean);
 		}catch(SQLException e){
 			System.out.println("즐겨찾기 추가 실패");
 			e.printStackTrace();
 		}
 		//결과뷰페이지
 		mav.addObject("userid", userid);//detail.do로 리셋할때 유저가 해당사진의 like를 찍었는지 조회하기 위해 유저 아이디를 파라미터로 넘김 viewCntController와 같음
-		mav.addObject("sort", sort);
-		mav.setViewName("redirect:/photo/photo/photoDetail.do?ptNo="+photoNo);//즐겨찾기 클릭후 리셋되는 주소, 파라미터
+		/*mav.addObject("sort", sort);*/
+		mav.addObject("sinkBean", ptBean);
+		mav.setViewName("/photo/faves/favesAdd");//즐겨찾기 클릭후 리셋되는 주소, 파라미터 ajax로 변경
 		return mav;
 	}
 	

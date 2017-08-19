@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.picxen.comments.model.MemberViewBean;
+import com.picxen.photo.model.PhotoBean;
 
 public class FavesService {
 	private FavesDAO fvDao;
@@ -14,7 +15,7 @@ public class FavesService {
 	}
 	
 	//class
-	public int insertFaves(FavesBean fvBean) throws SQLException{
+	public PhotoBean insertFaves(FavesBean fvBean) throws SQLException{
 		return fvDao.insertFaves(fvBean);
 	}
 	

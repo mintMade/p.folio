@@ -10,23 +10,6 @@
 }
 </style>
 </head>
-
-	<%String ip=request.getHeader("x-forwarded-for");
-	
-	if(ip==null||ip.length()==0){
-		ip=request.getHeader("Proxy-Client-IP");
-	}
-	
-	if(ip==null||ip.length()==0){
-		ip=request.getHeader("WL-Proxy-Client-IP");
-	}
-
-	if(ip==null||ip.length()==0){
-		ip=request.getRemoteAddr();
-		System.out.println("ptIp="+ip);
-		
-	}//ip확인  ip파라미터
-	%> 
 	
 <!-- 페이징 처리 form -->
 <form name="frmPage" method="post">

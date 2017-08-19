@@ -9,7 +9,7 @@ var lSize = $('input[name="likeSize"]').val(); //like리스트
 			$("#LFName").html(fName);
 			$("#LFName1").html("님 외에");	
 			$("#LFName2").html(fSize-1+"명");
-			/* 찍었을 경우 불켜짐*/
+			/* 본인 id가 리스트에 있을 경우 아이콘 컬러 변경*/
 			if(uid != null ){
 				$("#hrtLavel").css("color", "#CC0000");
 			};
@@ -46,7 +46,7 @@ var lSize = $('input[name="likeSize"]').val(); //like리스트
 			cnt = cnt + 1 
 			var ids = $('[id="lf_'+cnt+'"]').attr("title");
 			ranGrts.push(Greetings[Math.floor(Math.random()*Greetings.length)]);
-			$('[id="lf_'+cnt+'"]').attr("title", ids+":"+ranGrts[i]);
+			$('[id="lf_'+cnt+'"]').attr("title", ids+" : "+ranGrts[i]);
 			/* console.log(ids+":"+ranGrts[i]); */
 		}
 		var cntf = 0;

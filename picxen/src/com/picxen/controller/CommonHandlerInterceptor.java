@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -30,8 +32,7 @@ public class CommonHandlerInterceptor extends HandlerInterceptorAdapter {
 	}
 	
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, 
-			Object handler) throws Exception{ //
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{ //
 		//컨트롤러전 수행전 수행됨
 		//클라이언트 요청을 컨트롤러에 전달하기 전에 호출됨
 		System.out.println("preHandle() 메서드 호출");
@@ -47,7 +48,6 @@ public class CommonHandlerInterceptor extends HandlerInterceptorAdapter {
 			e.printStackTrace();
 		}
 		
-		
 		//유저 아이콘 조회
 			String iconUserid = (String)request.getSession().getAttribute("userid");
 			System.out.println("iconUserid="+iconUserid);
@@ -62,6 +62,15 @@ public class CommonHandlerInterceptor extends HandlerInterceptorAdapter {
 				e.printStackTrace();
 			}
 		}
+		
+		/*//클라이언트 ip => 사진 클릭시 viewUpdateController에서 체크
+		request = (HttpServletRequest) ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String ip = request.getHeader("X-FORWARDED-FOR");
+		if(ip == null || ip.isEmpty()) {
+			ip = request.getRemoteAddr();
+		}
+		System.out.println("preIp="+ip);
+		request.setAttribute("preIp", ip);*/
 		request.setAttribute("userIcon", userIcon);
 		request.setAttribute("cgList", cgList);
 		request.setAttribute("totalRecord", cgList.size());

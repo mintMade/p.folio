@@ -1,67 +1,85 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.picxen.comments.model.CmLikeBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>					
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page isELIgnored="false"%>					
 
 <script type="text/javascript">
+
 	function postComment(){
 		if(!frmCmt.content.value){
-			document.getElementById('cError').innerHTML="내용을 입력하십시오.";
-			document.getElementById('cError').style.color="#708090";
+			$('#cError').html("내용을 입력하세요.");
+			$('#cError').css("color", "#708090");
 			frmCmt.content.focus();
+			return false;	
+		}		
+		var logUid = $('#logUser').val();
+		if(logUid == null || logUid == ""){
+			alert("로그인 하세요.");
 			return false;
-		}
+		};
+		
 		frmCmt.submit();
 	}
 	
 	function submitTrple(cnt){
 		var c = cnt;
-		var tr = document.getElementById("treply_"+c); 
+		var tr = document.getElementById("treply_"+c);
+		var logUid = $('#logUser').val();
 		if(!tr.value){
 			document.getElementById("trError_"+c).innerHTML="내용을 입력하십시오.";
 			document.getElementById("trError_"+c).style.color="#708090"; 
 			tr.focus();
 			return false;
 		}
+
+		if(logUid == null || logUid == ""){
+			alert("로그인 하세요.");
+			return false;
+		};
+		
 		document.forms['formTopRply'+c].submit();
 	}
 		
+
 	
+	/* 코멘트 추천버튼 */	
 	 function tCmLikeBtn(cnt){
-		 var c = cnt;
-		 var f =document.getElementById("tCmId"+c);
-		 var g = 1; 
-		 var h = +f.value + g;
-		 f.value = h;
-		 document.getElementById("tCmId2"+c).innerHTML=h;
-		 /* alert(c); */
-		 /*click disabled  */
-		 f.disabled=true;
-		 f.style.color="#00688B";
-		 
-		 var topCmData = {
-				 "commentNo": document.getElementById("topCmNo"+c).value,
-				 "sortNo": document.getElementById("topCmSoNo"+c).value,
-				 "commentUser":document.getElementById("topCmUsr"+c).value,
-				 "ptNo": frmTopLike.ptNo.value,
-				 "userid":frmTopLike.userid.value,
-				 "sort":frmTopLike.sort.value,
-		 };
-		 
-		 $.ajax({
-			 url:"${pageContext.request.contextPath}/photo/comments/commentsLike.do",
-			 type:'GET',
-			 data:topCmData,
-			 success:function(data){
-				 /* alert("완료!"); */
-				 window.opener.location.reload();
-				 self.close();
-			 },
-			 error:function(jqXHR, textStatus, errorThrown){
-				 alert("에러발생 \n" + textStatus+ " : " + errorThrown); 
-				 self.close();
-			 }
+		var logUid = $('#logUser').val();
+		if(logUid == null || logUid == ""){
+			alert("로그인 하세요.");
+			return false;
+		};
+		
+		if(logUid != null || logUid != ""){
+			 var c = cnt;
+			 var f =document.getElementById("tCmId"+c);
+			 var g = 1; 
+			 var h = +f.value + g;
+			 f.value = h;
+			 document.getElementById("tCmId2"+c).innerHTML=h;
+			 f.disabled=true;
+			 f.style.color="#00688B";
 			 
-		 });		
+			 var topCmData = {
+					 "commentNo": document.getElementById("topCmNo"+c).value,
+					 "sortNo": document.getElementById("topCmSoNo"+c).value,
+					 "commentUser":document.getElementById("topCmUsr"+c).value,
+					 "ptNo": frmTopLike.ptNo.value,
+					 "userid":frmTopLike.userid.value,
+					 "sort":frmTopLike.sort.value,
+			 };
+			 
+			 $.ajax({
+				 url:"${pageContext.request.contextPath}/photo/comments/commentsLike.do",
+				 type:'GET',
+				 data:topCmData,
+				 success:function(data){
+				 }				 
+			 });		
+		};
+		 
 	  }
 
 	 function tReplybtn(cnt) {
@@ -100,11 +118,9 @@
 			 url:"${pageContext.request.contextPath}/photo/comments/cmDel.do",
 			 type:'GET',
 			 data:tCmDel,
-			 error:function(jqXHR, textStatus, errorThrown){
-				 alert("에러발생 \n" + textStatus+ " : " + errorThrown); 
-				 self.close();
-			 	}
-			 });
+			 success:function(data){
+			 }
+			});
 		 
 		 document.getElementById("tCmBox"+f).style.display='none';
 	 }//
@@ -122,48 +138,47 @@
 			 url:"${pageContext.request.contextPath}/photo/comments/cmDel.do",
 			 type:'GET',
 			 data:cmDel,
-			 error:function(jqXHR, textStatus, errorThrown){
-				 alert("에러발생 \n" + textStatus+ " : " + errorThrown); 
-				 self.close();
-			 	}
-			 });
+			 success:function(data){
+			 }
+		});
 		 
 		 document.getElementById("cmBox"+f).style.display='none';
 	 }
 	 
  	 function cmLikeBtn(cnt){
-		 var c = cnt;
-		 var f =document.getElementById("cmId"+c);
-		 var g = 1; 
-		 var h = +f.value + g;
-		 f.value = h;
-		 document.getElementById("cmId2"+c).innerHTML=h;
-		 f.disabled=true;
-		 f.style.color="#00688B";
-		 
-		 var topCmData = {
-				 "commentNo": document.getElementById("cmNo"+c).value,
-				 "sortNo": document.getElementById("cmSoNo"+c).value,
-				 "commentUser":document.getElementById("cmUsr"+c).value,
-				 "ptNo": frmTopLike.ptNo.value,
-				 "userid":frmTopLike.userid.value,
-				 "sort":frmTopLike.sort.value,
-		 };
-		 
-		 $.ajax({
-			 url:"${pageContext.request.contextPath}/photo/comments/commentsLike.do",
-			 type:'GET',
-			 data:topCmData,
-			 success:function(data){
-				 window.opener.location.reload();
-				 self.close();
-			 },
-			 error:function(jqXHR, textStatus, errorThrown){
-				 alert("에러발생 \n" + textStatus+ " : " + errorThrown); 
-				 self.close();
-			 }
+ 		var logUid = $('#logUser').val();
+		if(logUid == null || logUid == ""){
+			alert("로그인 하세요.");
+			return false;
+		};
+ 		 
+		if(logUid != null || logUid != ""){ 		 
+			 var c = cnt;
+			 var f =document.getElementById("cmId"+c);
+			 var g = 1; 
+			 var h = +f.value + g;
+			 f.value = h;
+			 document.getElementById("cmId2"+c).innerHTML=h;
+			 f.disabled=true;
+			 f.style.color="#00688B";
 			 
-		 });		
+			 var topCmData = {
+					 "commentNo": document.getElementById("cmNo"+c).value,
+					 "sortNo": document.getElementById("cmSoNo"+c).value,
+					 "commentUser":document.getElementById("cmUsr"+c).value,
+					 "ptNo": frmTopLike.ptNo.value,
+					 "userid":frmTopLike.userid.value,
+					 "sort":frmTopLike.sort.value,
+			 };
+			 
+			 $.ajax({
+				 url:"${pageContext.request.contextPath}/photo/comments/commentsLike.do",
+				 type:'GET',
+				 data:topCmData,
+				 success:function(data){
+				 }
+			 });//
+		 }
 	  }
  	 
  	function replybtn(cnt) {
@@ -192,50 +207,84 @@
  	
 	function submitrple(cn){
 		var c = cn;
-		var tr = document.getElementById("reply_"+c); 
+		var tr = document.getElementById("reply_"+c);
+ 		var logUid = $('#logUser').val();
 		if(!tr.value){
 			document.getElementById("rError_"+c).innerHTML="내용을 입력하십시오.";
 			document.getElementById("rError_"+c).style.color="#708090"; 
 			tr.focus();
 			return false;
 		}
+
+		if(logUid == null || logUid == ""){
+			alert("로그인 하세요.");
+			return false;
+		};
 		document.forms['formRply'+c].submit();
 	}
-
+	
+	$(window).ready(function(){
+		$('input[name=logPtNo]').each(function(){
+			var likeLog=$(this).val();			
+			$("button[data-lilog='" + likeLog +"']").attr('disabled', 'true').css('color', "#00688B")
+				.children('span').css('color', "#00688B");
+		});
+	});
+	
 </script>
 
 <body >
 	<div style=" background-color:#f5f5f5;">
 		<div class="container" style="max-width:1300px;">
 			<div class="cmtList" style="float:left; min-width:300px; width:51%;">
+				<% 
+					ArrayList<CmLikeBean> cmlog = (ArrayList)request.getAttribute("cmlog");
+					ArrayList loglist = new ArrayList();
+					for(CmLikeBean clBean : cmlog){
+						loglist.add(clBean.getCommentNo());
+					};
+				%>
+				 <c:set var="logCmN" value="<%=loglist%>" />
+				 <c:forEach var = "f" begin="1" end="${logCmN.size() }">
+				 	<input type="hidden" name="logPtNo" value="${logCmN[f-1]}">
+				 </c:forEach>
+				 
+				
 				<form name="frmTopLike" method="post">
 					<input type="hidden" name="ptNo"  value="${ptNo}"/>
-					<input type="hidden" name="userid"  value="${userid}"/>
+					<input type="hidden" id="logUser" name="userid"  value="${userid}"/>
 					<input type="hidden" name="sort" value="${sort}"/>
 				</form>
 			
-			<form name="frmCmt" method="post" >
-				<div style=" margin:10px 10px 10px 0px; color:#708090; ">		
-					<div style="">
-						<h5 style="font-weight:bold; margin-left:63px;">Comments</h5>
-					</div>
-						
-					<div style="float:left;">
-						<img src="${pageContext.request.contextPath}/my_icon/${mvBean.myIcon}" class="img-circle" 
-							style=" width:44px; height:44px;">
-					</div>
-								
-					<div class="ptComment" style="float:left; width:70%; margin-left:15px; margin-bottom:20px;" >
-						<textarea class="form-control"  rows="3" name="content" placeholder="댓글 입력"></textarea>
-						<div id="cError" style="float:left; margin-top:5px;">
+				<form name="frmCmt" method="post" >
+					<div style=" margin:10px 10px 10px 0px; color:#708090; ">		
+						<div style="">
+							<h5 style="font-weight:bold; margin-left:63px;">Comments</h5>
 						</div>
-						<div>
-							<input type="button" class="btn btn-info btn-m" value="입력" id="insertCm"
-								style="float:right; margin-top:10px; width:100px;" onclick="postComment()">
+						<c:if test="${sessionScope.userid != null && !empty sessionScope.userid}">
+							<div style="float:left;">
+								<img src="${pageContext.request.contextPath}/my_icon/${mvBean.myIcon}" class="img-circle" 
+									style=" width:44px; height:44px;">
+							</div>						
+						</c:if>
+						<c:if test="${sessionScope.userid == null && empty sessionScope.userid }">
+							<div style="float:left;">
+								<img src="${pageContext.request.contextPath}/my_icon/defaultIcon.jpg" class="img-circle" 
+									style=" width:44px; height:44px;">
+							</div>					
+						</c:if>	
+									
+						<div class="ptComment" style="float:left; width:70%; margin-left:15px; margin-bottom:20px;" >
+							<textarea class="form-control"  rows="3" name="content" placeholder="댓글 입력"></textarea>
+							<div id="cError" style="float:left; margin-top:5px;">
+							</div>
+							<div>
+								<input type="button" class="btn btn-info btn-m" value="입력" id="insertCm"
+									style="float:right; margin-top:10px; width:100px;" onclick="postComment()">
+							</div>
 						</div>
 					</div>
-				</div>
-			</form>
+				</form>
 			
 <!-- Top comment -->			
 		<div id="topLine" style="clear:both; max-width:500px; border-top: solid #cccccc 1px;">
@@ -248,19 +297,15 @@
 				
 				<c:if test="${tCmSize >= 1}">
 					<div style="padding:20px 10px 0px 63px; color:#708090; ">
-						TOP Comments
+						TOP Comments 
 					</div>
 					
 						<c:set var="cnt" value="0"/>
 						<c:forEach var="i" begin="0" end="${tCmSize-1}" >
 							<c:set var="cnt" value="${cnt+1 }" />
 							<c:set var="mcvBean" value="${tAlist[i]}"  />
-							<c:set var="clikeBean" value="${cmlog[i]}" /><!-- commentlog삽입 -->
-												
-			 <!--탑 코멘트겉 테두리 float 옵션으로 테두리넘어가서 overflow: auto; 적용 -->									
+							<c:set var="clikeBean" value="${cmlog[i]}" /><!-- commentlog삽입 -->				
 								<div class="tCmB" id="tCmBox${cnt}" data-sortNo="${mcvBean.sortNo}" style="padding:15px 0 25px 0;">
-								
-									
 			<!-- 유저아이콘 -->			<div style="float:left;">
 										<a href="${pageContext.request.contextPath}/user/user/userMain.do?userid=${mcvBean.userid}">
 											<img src="${pageContext.request.contextPath }/my_icon/${mcvBean.myIcon}" id="trIcon" class="img-circle" 
@@ -294,32 +339,30 @@
 											</div> --%>
 										
 			<!-- 유저 넥네임  -->		</div>
-									
-												
-			<!-- 탑 좋아요 추천-->			
-									<%-- <c:if test="${mcvBean.commentLike >= 1 }"> --%>  	<!--불필요 -->													
-									<div style="" > <!-- 좋아요 버튼  -->	
-										<c:if test="${mcvBean.userid==userid || clikeBean.commentNo == mcvBean.commentNo}">
-											<c:if test="${mcvBean.sortNo == 0}">
-												<button type="button" class="btn btn-cmBtn btn-xs disabled" id ="tCmId${cnt}" onclick="tCmLikeBtn(${cnt})"
-													value="${mcvBean.commentLike}" style="color:#00688B;">
-														<i class="fa fa-thumbs-up fa-lg" style="" ></i>
-															<span id="tCmId2${cnt}" style="margin-top:2px; font-size:10pt; color:#00688B;">
-																${mcvBean.commentLike}</span>
-												좋아요</button>
-											</c:if>
-										</c:if><!-- 정상과 비정상 테이블 비교 -->
 										
-										<c:if test="${mcvBean.userid != userid && clikeBean.commentNo != mcvBean.commentNo }">
-											<c:if test="${mcvBean.sortNo == 0}">
-												<button type="button" class="btn btn-cmBtn btn-xs" id ="tCmId${cnt}" onclick="tCmLikeBtn(${cnt})"
-													value="${mcvBean.commentLike}" style="color:#00bfFf;">
-														<i class="fa fa-thumbs-o-up fa-lg" style="" ></i> 
-															<span id="tCmId2${cnt}" style="margin-top:2px; font-size:10pt; color:#00bfFf;">
-																${mcvBean.commentLike}</span>
-												좋아요</button>
-											</c:if>
-										</c:if>																										
+			<!-- 탑 좋아요 추천-->													
+									<div style="" > <!-- 좋아요 버튼  -->
+											<c:if test="${mcvBean.userid==userid}">
+												<c:if test="${mcvBean.sortNo == 0}">
+													<button type="button" class="btn btn-cmBtn btn-xs disabled" id ="tCmId${cnt}" onclick="tCmLikeBtn(${cnt})"
+														value="${mcvBean.commentLike}" style="color:#00688B;">
+															<i class="fa fa-thumbs-up fa-lg" style="" ></i>
+																<span id="tCmId2${cnt}" style="margin-top:2px; font-size:10pt; color:#00688B;">
+																	${mcvBean.commentLike}</span>
+													좋아요</button>
+												</c:if>
+											</c:if><!-- 정상과 비정상 테이블 비교 -->
+
+											<c:if test="${mcvBean.userid != userid}">
+												<c:if test="${mcvBean.sortNo == 0}">
+													<button type="button" class="btn btn-cmBtn btn-xs" id ="tCmId${cnt}" data-liLog="${mcvBean.commentNo}" onclick="tCmLikeBtn(${cnt})"
+														value="${mcvBean.commentLike}" style="color:#00bfFf;">
+															<i class="fa fa-thumbs-o-up fa-lg" style="" ></i> 
+																<span id="tCmId2${cnt}" style="margin-top:2px; font-size:10pt; color:#00bfFf;">
+																	${mcvBean.commentLike}</span>
+													좋아요</button>
+												</c:if>
+											</c:if>																										
 										<input type="hidden" name="commentNo" id ="topCmNo${cnt}" value="${mcvBean.commentNo}"/> <!-- 코멘트넘버 -->
 										<input type="hidden" name="sortNo" id ="topCmSoNo${cnt}" value="${mcvBean.sortNo }">
 										<input type="hidden" name="commentUser" id ="topCmUsr${cnt}" value="${mcvBean.commentUser }"> <!-- 코멘트 작성자 회원넘버 -->
@@ -362,11 +405,21 @@
 				<input type="hidden" name="step" value="${mcvBean.step}"/>
 				
 				
-									<div class="form-group" id="trpId_${cnt}" style=" margin:20px 0 0 0; display:none;">		
-										<label style="float:left;">
-											<img src="${pageContext.request.contextPath}/my_icon/${mvBean.myIcon}" class="img-circle" 
-												style="float:left; width:44px; height:44px;">
-										</label>
+									<div class="form-group" id="trpId_${cnt}" style=" margin:20px 0 0 0; display:none;">	
+										<c:if test="${sessionScope.userid != null && !empty sessionScope.userid }">
+											<label style="float:left;">
+												<img src="${pageContext.request.contextPath}/my_icon/${mvBean.myIcon}" class="img-circle" 
+													style="float:left; width:44px; height:44px;">
+											</label>
+										</c:if>
+										
+										<c:if test="${sessionScope.userid == null && empty sessionScope.userid }">
+											<label style="float:left;">
+												<img src="${pageContext.request.contextPath}/my_icon/defaultIcon.jpg" class="img-circle" 
+													style="float:left; width:44px; height:44px;">
+											</label>
+										</c:if>
+										
 										<div style="float:left; margin-left:15px; width:80%; margin-bottom:20px;" >
 											<textarea class="form-control" name="content" id="treply_${cnt}" rows="2" placeholder="댓글 입력"></textarea>
 											<span id="trError_${cnt}" style="float:left; margin-top:5px;"></span>
@@ -409,7 +462,7 @@
 							<c:set var="mcvBean" value="${alist[i]}"  />
 							<c:set var="clikeBean" value="${cmlog[i]}" /><!-- commentlog삽입 -->
 																				
-								<div class="cmB" data-sortNo="${mcvBean.sortNo}" id="cmBox${cn}" style="overflow: auto; margin-top:20px;">
+								<div class="cmB" data-sortNo="${mcvBean.sortNo}" id="cmBox${cn}" style="padding:15px 0 25px 0;">
 								
 			<!-- 유저아이콘 -->			<div style="float:left;">
 										<a href="${pageContext.request.contextPath }/user/user/userMain.do?userid=${mcvBean.userid}">
@@ -434,10 +487,9 @@
 										</div>
 									</div>
 				
-			<!-- 좋아요 추천-->			
-									<%-- <c:if test="${mcvBean.commentLike >= 1 }"> --%>  	<!--불필요 -->													
+			<!-- 좋아요 추천-->															
 									<div style="" > <!-- 좋아요 버튼  -->
-										<c:if test="${mcvBean.userid == userid  || clikeBean.commentNo == mcvBean.commentNo}">
+										<c:if test="${mcvBean.userid == userid  }">
 											<c:if test="${mcvBean.sortNo == 0}">
 											<button type="button" class="btn btn-cmBtn btn-xs disabled" id ="cmId${cn}" onclick="cmLikeBtn(${cn})"
 											value="${mcvBean.commentLike}" style="color:#00688B;"><i class="fa fa-thumbs-up fa-lg" style="" >
@@ -449,9 +501,9 @@
 										</c:if>
 									
 										
-										<c:if test="${mcvBean.userid != userid && clikeBean.commentNo != mcvBean.commentNo}">
+										<c:if test="${mcvBean.userid != userid }">
 											<c:if test="${mcvBean.sortNo == 0}">
-											<button type="button" class="btn btn-cmBtn btn-xs" id ="cmId${cn}" onclick="cmLikeBtn(${cn})"
+											<button type="button" class="btn btn-cmBtn btn-xs" id ="cmId${cn}" data-liLog="${mcvBean.commentNo}" onclick="cmLikeBtn(${cn})"
 											value="${mcvBean.commentLike}" style="color:#00bfFf;"><i class="fa fa-thumbs-o-up fa-lg" style="" >
 											</i> 
 												<span id="cmId2${cn}" style="margin-top:2px; font-size:10pt; color:#00bfFf;">
@@ -486,7 +538,7 @@
 									</div>
 									
 			<!-- 코멘트 내용 -->
-									<div style="float:left; margin-left:17px; margin-bottom:20px;">	<!-- 내용 -->
+									<div style="margin-left:63px; margin-bottom:10px;*/">	<!-- 내용 -->
 										${mcvBean.content}						
 									</div>						
 			
@@ -495,23 +547,32 @@
 			<!-- reply 별도 컨트롤러 안거치고 다이렉트로 디테일 컨트롤러로 보냄 -->
 			<form name="formRply${cn}" id="formRply${cn}" method="post" action='<c:url value="/photo/comments/cmReply.do" />'>
 				<input type="hidden" name="ptNo"  value="${ptNo}"/>
-				<input type="hidden" name="userid"  value="${userid}"/>
+				<input type="hidden" name="userid" value="${userid}"/>
 				<input type="hidden" name="sort" value="${sort}"/><!-- sort, userid, ptNo입력은 ajax로 변경 예정 -->
 				<input type="hidden" name="sortNo" value="${mcvBean.sortNo}"/>
 				<input type="hidden" name="commentNo" value="${mcvBean.commentNo}"/>
 				<input type="hidden" name="groupNo" value="${mcvBean.groupNo}"/>
 				
-									<div class="form-group" id="rpId_${cn}" style="clear:both; margin:20px 0 0 0; display:none;  ">		
-										<label style="float:left;">
-											<img src="${pageContext.request.contextPath}/my_icon/${mvBean.myIcon}" class="img-circle" 
-												style="width:44px; height:44px;">
-										</label>
+									<div class="form-group" id="rpId_${cn}" style="clear:both; margin:20px 0 0 0; display:none;  ">
+										
+										<c:if test="${sessionScope.userid != null && !empty sessionScope.userid }">
+											<label style="float:left;">
+												<img src="${pageContext.request.contextPath}/my_icon/${mvBean.myIcon}" class="img-circle" 
+													style="float:left; width:44px; height:44px;">
+											</label>
+										</c:if>
+										<c:if test="${sessionScope.userid == null && empty sessionScope.userid }">
+											<label style="float:left;">
+												<img src="${pageContext.request.contextPath}/my_icon/defaultIcon.jpg" class="img-circle" 
+													style="float:left; width:44px; height:44px;">
+											</label>
+										</c:if>										
 										<div style="float:left; margin-left:15px; width:80%; margin-bottom:20px;" >
 											<textarea class="form-control" name="content" id="reply_${cn}" rows="2" placeholder="댓글 입력"></textarea>
 											<span id="rError_${cn}" style="float:left; margin-top:5px;"></span>
 											<div style="float:right; margin:5px 0 0 0;">
 												<input type="button" class="btn btn-info btn-m" style="height:33px;" value="입력" id="rple"
-													onclick="submitrple(${cn})"><!-- submitTrple리플넘기기 --><!-- tRple201706 -->
+												onclick="submitrple(${cn})"><!-- submitTrple리플넘기기 --><!-- tRple201706 -->
 											</div>
 										</div>
 									</div>

@@ -11,22 +11,6 @@
 
 </head>
 
-	<%String ip=request.getHeader("x-forwarded-for");
-	
-	if(ip==null||ip.length()==0){
-		ip=request.getHeader("Proxy-Client-IP");
-	}
-	
-	if(ip==null||ip.length()==0){
-		ip=request.getHeader("WL-Proxy-Client-IP");
-	}
-
-	if(ip==null||ip.length()==0){
-		ip=request.getRemoteAddr();
-		System.out.println("ptIp="+ip);
-		
-	}//ip확인  ip파라미터
-	%>
 <body>
 <div  style=" background-color: white; color:#5C5C5C;">
 		<div style="text-align:center; padding:5px;">
@@ -34,24 +18,43 @@
 			<h4 style="text-align:center; padding:5px;">사진 전문가와 애호가, 그리고 사진을 즐기는 모든이의 공간으로 초대합니다.</h4><br>
 		</div>
 </div>
-
 <!-- image different Ratio gallery css html -->
 
-<div style="background-color:#F5F5F5; padding:30px; border-top:solid 1px #E5E5E5;" >
-<div class="container" style="background-color:#F5F5F5;">
-  <!-- 	<ul class="row"> -->
-  		<c:set var="count" value="0"/>
+	<div style="background-color:#F5F5F5; padding:30px; border-top:solid 1px #E5E5E5;" >
+		<div class="container" style="background-color:#F5F5F5;">
+		  <!-- 	<ul class="row"> -->
+		  	<c:set var="count" value="0"/>
 			<c:forEach var="ptBean" items="${alist }">
 			<c:set var="count" value="${count+1 }"/>
-    	<div class="col-lg-3 col-md-3 col-sm-6 col-md-4" >
-    	<%-- <a href ="${pageContext.request.contextPath}/photo/photo/photoDetail.do?ptNo=${ptBean.photoNo}" > --%>
-    	<a href ="${pageContext.request.contextPath}/photo/photo/photoCountUpdate.do?ptNo=${ptBean.photoNo}&userid=${userid}&sort=pop&ip=<%=ip %>" >
-    	<div class="img-responsive img-thumbnail ratio-4-3" style="background-image:url('${pageContext.request.contextPath}/pt_images/${ptBean.imageURL}')">
-    	</div>
-      		</a>
-    </div>
+			    <div class="col-lg-3 col-md-3 col-sm-6 col-md-4" > 
+			    	<a href ="#" class="dTailView" data-idx="${count }">
+				    	<div class="img-responsive img-thumbnail ratio-4-3" style="background-image:url('${pageContext.request.contextPath}/pt_images/${ptBean.imageURL}')">
+				    	</div>
+			      	</a>
+			      	<form name="frmList_${count }" method="POST">
+			      		<input type="hidden" name="ptNo" value="${ptBean.photoNo }">
+			      		<input type="hidden" name="sort" value="pop">
+			      	</form>
+			    </div>
 			</c:forEach>
-  <!-- </ul> -->
-</div> 
-</div>
+		  <!-- </ul> -->
+		</div> 
+	</div>
 </body>
+<script type="text/javascript">
+	$('.dTailView').each(function(){
+		$(this).on('click', function(){
+			var idx = $(this).data('idx');
+			var detailPtData = $('form[name="frmList_'+idx+'"]').serialize();
+			$.ajax({
+				type: "POST",
+				url: "${pageContext.request.contextPath}/photo/photoCountUpdate.do",
+				data: detailPtData,
+				success:function(data){
+					window.location.href="${pageContext.request.contextPath}/photo/photo/photoDetail.do?"+this.data
+				}
+			});
+		})
+	});
+
+</script>

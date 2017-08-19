@@ -3,10 +3,10 @@
 
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/mainstyle.css'/>">
 <center>
-<a href="javascript:self.close()">
-	<img src='<c:url value="/pt_images/${param.imgUrl }"/>' border="0" width="380">
-</a>
+	<a href="javascript:self.close()">
+		<img src='<c:url value="/pt_images/${param.imgUrl }"/>' border="0" width="380">
+	</a>
 <br>
-<a href="javascript:self.close()">[닫기]</a>
+	<a href="javascript:self.close()">[닫기] </a>
 </center>
 

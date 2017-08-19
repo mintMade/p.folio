@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.picxen.common.PagingBean;
@@ -35,7 +36,7 @@ public class UserMainController {
 	}
 	
 	
-	@RequestMapping("/user/user/userMain.do")
+	@RequestMapping(value="/user/user/userMain.do", method= {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView userHome(HttpServletRequest request, String userid, IpLogBean ilBean, String ip,
 				Integer mainCg /*mainCg = 유저 메인 카테고리선택번호*/){
 		//유저아이디를 이용하여 유저홈으로 이동

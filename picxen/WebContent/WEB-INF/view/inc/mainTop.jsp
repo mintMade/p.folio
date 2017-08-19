@@ -53,7 +53,7 @@
 	</c:if>
 		
 		<div style="margin:0 5px 0 5px;">
-			<a class="btn btn-menuBtn btn-xs" href="${pageContext.request.contextPath}/photo/photoList.do?ftName=pop">
+			<a class="btn btn-menuBtn btn-xs" href="${pageContext.request.contextPath}/photo/photoList.do?sort=pop">
 				<i class="fa fa-picture-o fa-fw" aria-hidden="true"></i><span class="MenuBtnTxt"> 구경하기</span></a>
 			<a class="btn btn-menuBtn btn-xs" href="${pageContext.request.contextPath}/photo/ptUpload/ptUp.do">
 				<i class="fa fa-cloud-upload fa-fw" aria-hidden="true"></i><span class="MenuBtnTxt"> 사진올리기</span></a>

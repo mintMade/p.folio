@@ -8,6 +8,7 @@ import com.ibatis.config.SqlMapConfigManager;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.picxen.comments.model.CmLikeBean;
 import com.picxen.comments.model.MemberViewBean;
+import com.picxen.photo.model.PhotoBean;
 import com.picxen.photo.model.PhotoLikeBean;
 
 public class IbatisFavesDAO implements FavesDAO{//implements 미적용 시 dispatcher의 dao에러, no matching editors...
@@ -21,9 +22,9 @@ public class IbatisFavesDAO implements FavesDAO{//implements 미적용 시 dispatche
 	}
 	
 	@Override
-	public int insertFaves(FavesBean fvBean) throws SQLException{ //like는 photoDAO에있음
+	public PhotoBean insertFaves(FavesBean fvBean) throws SQLException{ //like는 photoDAO에있음
 		int key=0, n=0;
-		
+		PhotoBean ptBean = new PhotoBean();
 		try{
 			sqlMap.startTransaction();
 			
@@ -38,8 +39,10 @@ public class IbatisFavesDAO implements FavesDAO{//implements 미적용 시 dispatche
 			if( n == 1){
 				key =(Integer)sqlMap.insert("favesInsert", fvBean);
 			}
-									
 			sqlMap.queryForObject("prcdFaves_pop", fvBean);//프로시져
+			/*ptBean.setPhotoNo(fvBean.getPhotoNo());*/
+			ptBean = (PhotoBean) sqlMap.queryForObject("ptDetail", fvBean.getPhotoNo());
+			System.out.println("transcPhotoBean="+ptBean);
 			
 			sqlMap.executeBatch();
 			sqlMap.commitTransaction();
@@ -52,7 +55,7 @@ public class IbatisFavesDAO implements FavesDAO{//implements 미적용 시 dispatche
 			sqlMap.endTransaction();
 		}
 		
-		return key;
+		return ptBean;
 	}//insertFaves()
 	
 	//faveList for ptDetail page 애정 리스트 검색 후 리스트에 담기

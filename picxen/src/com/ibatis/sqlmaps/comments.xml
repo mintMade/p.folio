@@ -101,11 +101,18 @@
     		values(cmlike_seq.nextval, #commentUser#, #ptNo#, #commentNo#, #sortNo#, #userid#)
 	</update><!-- cdata -->
 	
-	<update id="upCommentLikeTran" parameterClass="clBean">
+<!-- 	<update id="upCommentLikeTran" parameterClass="clBean">
 		update comments set commentLike = commentLike +1
     		where commentNo=#commentNo# and 
         		(select count(*) from cmlike where ptNo = #ptNo# and commentUser=#commentUser# and commentNo=#commentNo#
         			and sortNo=#sortNo# and userid=#userid#) <![CDATA[<]]>= 1
+	</update> -->
+	
+	<update id="upCommentLikeTran" parameterClass="clBean">
+		update comments set commentLike = commentLike +1
+    		where commentNo=#commentNo# 
+    		and not EXISTS (select 1 from cmlike where ptNo = #ptNo# and commentUser=#commentUser# and commentNo=#commentNo#
+        			and sortNo=#sortNo# and userid=#userid#)
 	</update>
 	
 	<!-- 리플 삭제에서 사용: 삭제취소 -->	

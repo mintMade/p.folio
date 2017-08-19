@@ -20,6 +20,7 @@ public class CommentsDAO {
 	
 	//코멘트 출력
 	public ArrayList<CommentsBean> searchComments(int ptNo) throws SQLException{
+		@SuppressWarnings("unchecked")
 		ArrayList<CommentsBean> alist = (ArrayList<CommentsBean>)sqlMap.queryForList("userComments",ptNo);
 		return alist;
 	}
@@ -43,6 +44,7 @@ public class CommentsDAO {
 	}//memberNo()
 	
 //탑코멘트 출력	: 모두출력으로 변경됨
+	@SuppressWarnings("unchecked")
 	public ArrayList<MemCommentViewBean> topComments(int ptNo)throws SQLException{
 		ArrayList<MemCommentViewBean> tAlist=null;
 		tAlist = (ArrayList<MemCommentViewBean>)sqlMap.queryForList("getTopComments", ptNo);
@@ -50,13 +52,8 @@ public class CommentsDAO {
 	}//topComment, memCommentBean
 	
 //일반 코멘트 출력
-	
-/*	public ArrayList<MemCommentViewBean> getCmList(int ptNo)throws SQLException{
-		ArrayList<MemCommentViewBean> alist=
-		 (ArrayList<MemCommentViewBean>)sqlMap.queryForList("getComments", ptNo);
-		return alist;
-	}//alist; commentList
-*/	
+
+	@SuppressWarnings("unchecked")
 	public ArrayList<MemCommentViewBean> getCmList(int ptNo)throws SQLException{
 		ArrayList<MemCommentViewBean> alist= null;
 			try{
@@ -74,19 +71,15 @@ public class CommentsDAO {
 		int n=0;
 		try{
 			sqlMap.startTransaction();
-		
-			//merge 구문
-			n=(Integer)sqlMap.update("cmLikeMerge", clBean);
 			
-			//clNo clBean을받아서 아래 업데이트에 주입하려했으나 무조건 업데이트되는 현상 발생
-			
-			/*clBean.setClNo(clBean.getClNo());
-			System.out.println("clNo=!"+clBean);*/
-			
-			//like update가 무조건 업데이트하는것을 방지하기위해 if문 적용
-			if(n == 1){
+			//merge 결과리턴에 리스크가 있어 upCommentLikeTran과 순서바꿈 
+			//170729 EXISTS쿼리 문으로수정
 			//commentLike 업데이트
-			sqlMap.update("upCommentLikeTran", clBean);
+			n=sqlMap.update("upCommentLikeTran", clBean);
+			if(n == 1){
+			System.out.println("코멘트좋아요 성공="+n);
+			//merge 구문
+			sqlMap.update("cmLikeMerge", clBean);
 			}
 			
 			sqlMap.executeBatch();
